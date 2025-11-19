@@ -1,0 +1,689 @@
+/* myOrganizationsPage.css - 样式文件 */
+
+/*** 全局样式 ***/
+page {
+  background-color: #F0F4F8;
+  font-family: -apple-system, BlinkMacSystemFont, 'Helvetica Neue', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+}
+.page-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  box-sizing: border-box;
+  background-color: #F0F4F8;
+}
+
+/*** 导航栏样式 ***/
+.custom-nav-bar {
+  background-color: #004299;
+  z-index: 999;
+}
+.nav-bar-content {
+  display: flex;
+  align-items: center;
+  position: relative;
+}
+.nav-back {
+  width: 60rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 12px;
+  z-index: 2;
+}
+.back-arrow {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+.nav-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #FFFFFF;
+}
+
+/*** 颜色相关样式 ***/
+.primary-color { color: #004299;
+}
+.primary-bg { background-color: #004299 !important;
+}
+.secondary-color { color: #2A6DCF;
+}
+.secondary-bg { background-color: #2A6DCF !important;
+}
+.auxiliary-color { color: #79A6DC;
+}
+.auxiliary-bg { background-color: #79A6DC !important;
+}
+.main-text-color { color: #333333;
+}
+.sub-text-color { color: #666666;
+}
+.tip-text-color { color: #999999;
+}
+.white-text { color: #FFFFFF;
+}
+.divider-color { background-color: #EEEEEE;
+}
+.highlight-color { color: #FF9800;
+}
+
+/*** 布局相关样式 ***/
+.content-area {
+  flex: 1;
+  padding-bottom: 30rpx;
+}
+.tab-content {
+  min-height: calc(100vh - 200rpx);
+}
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.flex-1 {
+  flex: 1;
+}
+.space-between {
+  justify-content: space-between;
+}
+.gap-10 {
+  gap: 10rpx;
+}
+.gap-20 {
+  gap: 20rpx;
+}
+
+/*** Tab样式 ***/
+.custom-tabs {
+  display: flex;
+  position: relative;
+  background-color: #FFFFFF;
+  height: 90rpx;
+  border-bottom: 1px solid #EEEEEE;
+}
+.custom-tab-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  color: #666666;
+  position: relative;
+  transition: all 0.3s;
+}
+.custom-tab-active {
+  color: #004299;
+  font-weight: 600;
+}
+.custom-tab-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 4rpx;
+  background-color: #004299;
+  transition: transform 0.3s;
+}
+
+/*** 搜索样式 ***/
+.search-container {
+  padding: 20rpx 30rpx;
+  background-color: #FFFFFF;
+}
+.custom-search-bar {
+  display: flex;
+  align-items: center;
+  background-color: #F0F4F8;
+  border-radius: 8rpx;
+  padding: 0 20rpx;
+  height: 70rpx;
+}
+.search-input {
+  flex: 1;
+  height: 70rpx;
+  font-size: 28rpx;
+}
+.search-clear {
+  color: #999999;
+  font-size: 40rpx;
+  width: 60rpx;
+  text-align: center;
+}
+.search-btn {
+  background-color: #004299;
+  color: white;
+  height: 60rpx;
+  padding: 0 20rpx;
+  border-radius: 6rpx;
+  font-size: 26rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/*** 组织卡片样式 ***/
+.org-card {
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+  margin: 30rpx 30rpx 0;
+  padding: 0;
+  box-shadow: 0 4rpx 20rpx rgba(0, 66, 153, 0.08);
+  overflow: hidden;
+}
+.org-item {
+  display: flex;
+  align-items: center;
+  padding: 30rpx;
+  border-bottom: 1px solid #EEEEEE;
+  position: relative;
+}
+.org-item:active {
+  background-color: #F8F8F8;
+}
+.org-item:last-child {
+  border-bottom: none;
+}
+.org-logo {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 50%;
+  margin-right: 24rpx;
+  background-color: #F5F5F5;
+  border: 1px solid #EEEEEE;
+}
+.org-logo-placeholder {
+  width: 90rpx;
+  height: 90rpx;
+  border-radius: 50%;
+  margin-right: 24rpx;
+  background-color: #F0F4F8;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #79A6DC;
+  font-size: 40rpx;
+}
+.org-info {
+  flex: 1;
+  overflow: hidden;
+}
+.org-name {
+  font-size: 32rpx;
+  color: #333333;
+  font-weight: 500;
+  margin-bottom: 8rpx;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.org-type {
+  font-size: 26rpx;
+  color: #666666;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.org-desc {
+  font-size: 26rpx;
+  color: #666666;
+  margin-top: 4rpx;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 1.5;
+}
+.view-qrcode {
+  color: #2A6DCF;
+  font-size: 28rpx;
+  display: flex;
+  align-items: center;
+  padding: 16rpx 0 16rpx 16rpx;
+}
+.view-qrcode text {
+  margin-right: 6rpx;
+}
+
+/*** 箭头样式 ***/
+.arrow-right {
+  font-size: 32rpx;
+  color: #2A6DCF;
+  margin-left: 8rpx;
+}
+
+/*** 按钮样式 ***/
+.btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8rpx;
+  font-size: 28rpx;
+  height: 68rpx;
+  padding: 0 30rpx;
+  min-width: 140rpx;
+  transition: opacity 0.2s;
+}
+.btn:active {
+  opacity: 0.8;
+}
+.primary-btn {
+  background-color: #004299;
+  color: #FFFFFF;
+}
+.secondary-btn {
+  background-color: #EEEEEE;
+  color: #333333;
+}
+.text-btn {
+  background-color: transparent;
+  color: #2A6DCF;
+  padding: 0;
+  height: auto;
+}
+.disabled-btn {
+  background-color: #EEEEEE;
+  color: #999999;
+}
+
+/*** 分类筛选样式 ***/
+.category-filter {
+  display: flex;
+  background-color: #FFFFFF;
+  padding: 10rpx 30rpx 20rpx;
+  white-space: nowrap;
+  overflow-x: auto;
+  box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+.category-filter::-webkit-scrollbar {
+  display: none;
+}
+.filter-item {
+  display: inline-block;
+  padding: 12rpx 32rpx;
+  margin-right: 20rpx;
+  border-radius: 30rpx;
+  font-size: 28rpx;
+  color: #666666;
+  background-color: #F0F4F8;
+  transition: all 0.2s;
+}
+.filter-item:active {
+  opacity: 0.8;
+}
+.filter-item.active {
+  background-color: #2A6DCF;
+  color: #FFFFFF;
+  font-weight: 500;
+}
+
+/*** 加载状态 ***/
+.loading-container {
+  padding: 30rpx 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.custom-loading {
+  text-align: center;
+  padding: 20rpx 0;
+  color: #999999;
+  font-size: 28rpx;
+}
+
+/*** 加载更多区域 ***/
+.load-more-area {
+  padding: 30rpx 0;
+  text-align: center;
+}
+.load-more-text {
+  color: #666666;
+  font-size: 28rpx;
+}
+
+/*** 空状态样式 ***/
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 160rpx 0;
+}
+.empty-icon {
+  font-size: 100rpx;
+  color: #CCCCCC;
+  margin-bottom: 30rpx;
+}
+.empty-text {
+  font-size: 28rpx;
+  color: #999999;
+  margin-bottom: 40rpx;
+  text-align: center;
+  padding: 0 60rpx;
+  line-height: 1.5;
+}
+.empty-action {
+  margin-top: 20rpx;
+}
+
+/*** 二维码弹窗样式 ***/
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.qrcode-modal {
+  background-color: #FFFFFF;
+  border-radius: 20rpx;
+  width: 600rpx;
+  margin: 0 auto;
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 6rpx 30rpx rgba(0, 0, 0, 0.1);
+}
+.qrcode-title {
+  font-size: 34rpx;
+  color: #333333;
+  font-weight: 600;
+  margin-bottom: 30rpx;
+  text-align: center;
+}
+.qrcode-subtitle {
+  font-size: 28rpx;
+  color: #666666;
+  margin-top: -10rpx;
+  margin-bottom: 30rpx;
+}
+.qrcode-container {
+  width: 440rpx;
+  height: 440rpx;
+  margin: 20rpx 0 40rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #FFFFFF;
+  border-radius: 8rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+.qrcode-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5;
+}
+.loading-text {
+  color: #666666;
+  font-size: 28rpx;
+}
+.qrcode-image {
+  width: 100%;
+  height: 100%;
+  background-color: #FFFFFF;
+}
+.qrcode-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 20rpx;
+}
+.qrcode-desc {
+  font-size: 30rpx;
+  color: #333333;
+  font-weight: 500;
+  margin-bottom: 10rpx;
+}
+.qrcode-tip {
+  font-size: 24rpx;
+  color: #999999;
+}
+.qrcode-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+.qrcode-btn {
+  flex: 1;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+}
+.save-btn {
+  background-color: #004299;
+  color: #FFFFFF;
+  margin-right: 20rpx;
+}
+.close-btn {
+  background-color: #EEEEEE;
+  color: #333333;
+  margin-left: 20rpx;
+}
+
+/*** 响应式调整 ***/
+@media screen and (max-width: 375px) {
+.org-card {
+    margin: 20rpx 20rpx 0;
+}
+.org-item {
+    padding: 24rpx;
+}
+.org-logo {
+    width: 80rpx;
+    height: 80rpx;
+    margin-right: 20rpx;
+}
+.org-name {
+    font-size: 30rpx;
+}
+.org-type, .org-desc {
+    font-size: 24rpx;
+}
+}
+
+/* 自定义导航栏样式 */
+.custom-nav-bar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  background-color: #004299;
+  z-index: 999;
+}
+.nav-bar-content {
+  display: flex;
+  align-items: center;
+  height: 44px;
+  position: relative;
+}
+.nav-back {
+  width: 60rpx;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: absolute;
+  left: 12px;
+  z-index: 2;
+}
+.back-arrow {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: #FFFFFF;
+}
+.nav-title {
+  position: absolute;
+  left: 0;
+  right: 0;
+  text-align: center;
+  font-size: 18px;
+  font-weight: 500;
+  color: #FFFFFF;
+  line-height: 44px;
+}
+
+/* 内容区域调整 */
+.content-area {
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+/* 自定义Tab样式 */
+.custom-tabs {
+  display: flex;
+  position: relative;
+  background-color: #FFFFFF;
+  height: 90rpx;
+  border-bottom: 1px solid #EEEEEE;
+}
+.custom-tab-item {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 30rpx;
+  color: #666666;
+  position: relative;
+  transition: all 0.3s;
+}
+.custom-tab-active {
+  color: #004299;
+  font-weight: 600;
+}
+.custom-tab-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 50%;
+  height: 4rpx;
+  background-color: #004299;
+  transition: transform 0.3s;
+}
+
+/* 二维码样式升级 - 参考校友卡页面 */
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.qrcode-modal {
+  background-color: #FFFFFF;
+  border-radius: 16rpx;
+  width: 600rpx;
+  padding: 40rpx 30rpx;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  box-shadow: 0 6rpx 30rpx rgba(0, 0, 0, 0.1);
+}
+.qrcode-title {
+  font-size: 36rpx;
+  color: #333333;
+  font-weight: 600;
+  text-align: center;
+}
+.qrcode-subtitle {
+  font-size: 28rpx;
+  color: #666666;
+  margin-top: 4rpx;
+  margin-bottom: 30rpx;
+}
+.qrcode-container {
+  width: 440rpx;
+  height: 440rpx;
+  margin: 20rpx 0 30rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F6F6F6;
+  border-radius: 8rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 10rpx rgba(0, 0, 0, 0.05);
+}
+.qrcode-image {
+  width: 100%;
+  height: 100%;
+  background-color: #FFFFFF;
+}
+.qrcode-loading {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #F5F5F5;
+}
+.loading-text {
+  color: #666666;
+  font-size: 28rpx;
+}
+.qrcode-footer {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 30rpx;
+}
+.qrcode-desc {
+  font-size: 30rpx;
+  color: #333333;
+  font-weight: 500;
+  margin-bottom: 10rpx;
+}
+.qrcode-tip {
+  font-size: 24rpx;
+  color: #999999;
+}
+.qrcode-buttons {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-top: 10rpx;
+}
+.qrcode-btn {
+  flex: 1;
+  height: 80rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8rpx;
+  font-size: 30rpx;
+}
+.save-btn {
+  background-color: #004299;
+  color: #FFFFFF;
+  margin-right: 20rpx;
+}
+.close-btn {
+  background-color: #EEEEEE;
+  color: #333333;
+  margin-left: 20rpx;
+}

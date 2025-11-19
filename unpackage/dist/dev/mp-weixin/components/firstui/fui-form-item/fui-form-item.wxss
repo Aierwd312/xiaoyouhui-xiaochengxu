@@ -1,0 +1,123 @@
+
+.fui-form__item-wrap.data-v-a27156ed,
+	.fui-form__item-outer.data-v-a27156ed {
+		position: relative;
+
+		width: 100%;
+		box-sizing: border-box;
+		display: flex;
+
+		flex-direction: column;
+}
+.fui-form__wrap-inner.data-v-a27156ed {
+
+		width: 100%;
+		box-sizing: border-box;
+		display: flex;
+
+		flex-direction: row;
+
+
+
+		align-items: center;
+		position: relative;
+}
+.fui-form__highlight.data-v-a27156ed:active {
+
+
+
+
+
+		background-color: var(--fui-bg-color-hover, rgba(0, 0, 0, 0.2)) !important;
+}
+.fui-form__asterisk.data-v-a27156ed {
+		position: absolute;
+		left: 12rpx;
+
+		height: 30rpx;
+		top: 50%;
+		transform: translateY(-50%);
+		line-height: 1.15;
+}
+.fui-form__item-label.data-v-a27156ed {
+		padding-right: 12rpx;
+
+		display: inline-block;
+		flex-shrink: 0;
+}
+.fui-form__item-sizing.data-v-a27156ed {
+		box-sizing: border-box;
+}
+.fui-form__item-content.data-v-a27156ed {
+		flex: 1;
+}
+.fui-form__item-bottom.data-v-a27156ed {
+		position: absolute;
+		bottom: 0;
+
+
+
+
+
+		height: 1px;
+		transform: scaleY(0.5) translateZ(0);
+		transform-origin: 0 100%;
+		z-index: 1;
+}
+.fui-form__item-arrow.data-v-a27156ed {
+		height: 40rpx;
+		width: 40rpx;
+		border-width: 3px 3px 0 0;
+		border-style: solid;
+		transform: rotate(45deg) scale(0.5);
+
+		border-radius: 4rpx;
+		flex-shrink: 0;
+		margin-left: auto;
+		box-sizing: border-box;
+
+
+
+
+		transform-origin: center center;
+		margin-right: -5.8579rpx;
+}
+.fui-form__item-error.data-v-a27156ed {
+
+		width: 100%;
+		z-index: 2;
+		box-sizing: border-box;
+
+		font-size: 24rpx;
+		line-height: 32rpx;
+}
+.fui-form__error-relative.data-v-a27156ed {
+		position: relative;
+		padding-top: 4rpx;
+		padding-bottom: 4rpx;
+}
+.fui-form__error-absolute.data-v-a27156ed {
+		position: absolute;
+		bottom: 0;
+		left: 0;
+		right: 0;
+
+		transform: translateY(-100%);
+
+
+
+
+		opacity: 0;
+		transition-property: transform, opacity;
+		transition-duration: 0.3s;
+}
+.fui-form__error-active.data-v-a27156ed {
+		opacity: 1;
+		transform: translateY(0);
+}
+.fui-form__error-text.data-v-a27156ed {
+		font-size: 24rpx;
+}
+.fui-form__error-right.data-v-a27156ed {
+		text-align: right;
+}

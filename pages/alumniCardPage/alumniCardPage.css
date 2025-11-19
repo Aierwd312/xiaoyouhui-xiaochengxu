@@ -1,0 +1,344 @@
+/* 全局样式 */
+page, view, text, image, button, input {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* 配色常量 - 小程序不支持CSS变量，使用注释标明颜色用途 */
+/* theme-color: #004299 - 主题色 - 重财蓝 */
+/* auxiliary-color-1: #2A6DCF - 辅助色1 */
+/* auxiliary-color-2: #79A6DC - 辅助色2 */
+/* accent-color-1: #FF9800 - 图标强调色1 - 橙色 */
+/* accent-color-2: #4CAF50 - 图标强调色2 - 绿色 */
+/* background-color: #F0F4F8 - 背景色 */
+/* card-color: #FFFFFF - 卡片背景 */
+/* text-color-main: #333333 - 主文字色 */
+/* text-color-secondary: #666666 - 次文字色 */
+/* text-color-hint: #999999 - 提示文字色 */
+/* divider-color: #EEEEEE - 分割线色 */
+/* alert-color: #FF5722 - 提醒/角标色 */
+
+/* 内容区域 */
+.content-area {
+    min-height: 100vh;
+    background-color: #F0F4F8; /* 页面背景色 - 浅灰蓝色，按照重财版规范 */
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+/* 卡片容器 */
+.card-container {
+    padding: 20px 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    align-items: center;
+    padding-bottom: 100px; /* 调整底部间距 */
+    width: 100%;
+    overflow-y: auto; /* 添加滚动 */
+    -webkit-overflow-scrolling: touch; /* 提高移动端滚动体验 */
+}
+
+/* 校友卡 */
+.alumni-card {
+    width: 95%;
+    background: linear-gradient(to bottom, #004299, #1976D2);
+    border-radius: 12px;
+    padding: 16px 20px;
+    color: #FFFFFF;
+    box-shadow: 0 8px 20px rgba(0, 66, 153, 0.2);
+    overflow: hidden;
+    position: relative;
+}
+
+/* 校友卡背景图案 - 可选添加学校建筑剪影 */
+.alumni-card::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-size: cover;
+    background-position: center;
+    opacity: 0.1;
+    z-index: 0;
+}
+
+/* 卡片内容定位 */
+.card-header, .card-content {
+    position: relative;
+    z-index: 1;
+}
+
+/* 卡片顶部 */
+.card-header {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+/* 完整标题图片容器 */
+.school-title-image {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+/* 完整标题图片 */
+.title-full-image {
+    width: 270px;
+    height: 67.5px;
+    object-fit: contain;
+    margin-right: 15px;
+    display: block;
+    max-width: 100%;
+}
+
+/* 校友卡文字 */
+.school-alumni-text {
+    font-size: 16px;
+    font-weight: bold;
+    color: #FFFFFF;
+    line-height: 1.3;
+    letter-spacing: 1px;
+}
+
+/* 移除旧的logo相关样式，保留备用 */
+.school-logo {
+    display: none;
+    margin-right: 15px;
+}
+
+.logo-image {
+    display: none;
+    width: 60px;
+    height: 60px;
+    filter: brightness(0) saturate(100%) invert(100%); /* 转为白色 */
+}
+
+.school-info {
+    display: none;
+    flex-direction: column;
+}
+
+.school-name {
+    display: none;
+    font-size: 26px;
+    font-weight: bold;
+    color: #FFFFFF;
+    line-height: 1.3;
+    letter-spacing: 1px;
+}
+
+.school-name-en {
+    display: none;
+    font-size: 8px;
+    color: #FFFFFF;
+    margin-top: 2px;
+    line-height: 1.2;
+}
+
+.card-title {
+    display: none;
+    font-size: 18px;
+    color: #FFFFFF;
+    margin-top: 8px;
+    letter-spacing: 1px;
+}
+
+/* 卡片内容 */
+.card-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 5px;
+}
+
+/* 左侧信息区 */
+.user-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+/* 标签容器样式 */
+.label-container {
+    width: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.info-label {
+    color: #FFFFFF;
+    font-size: 16px;
+    min-width: 4em; /* 设置最小宽度，确保能容纳最长的标签 */
+    text-align: justify; /* 两端对齐 */
+    text-align-last: justify; /* 最后一行也两端对齐 */
+}
+
+.info-value {
+    color: #FFFFFF;
+    font-size: 16px;
+    font-weight: 500;
+    margin-left: 10px;
+}
+
+/* 右侧照片区 */
+.user-photo {
+    width: 100px;
+    height: 130px;
+    background-color: #FFFFFF;
+    border: 2px solid rgba(255, 255, 255, 0.5);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-left: 20px;
+    margin-top: -3px;
+}
+
+.photo-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* 二维码按钮 */
+.qrcode-button {
+    display: none; /* 隐藏旧按钮 */
+}
+
+/* 二维码弹出层 */
+.qrcode-popup {
+    display: none; /* 隐藏旧弹窗 */
+}
+
+.qrcode-container {
+    display: none; /* 隐藏旧容器 */
+}
+
+.qrcode-header {
+    display: none; /* 隐藏旧头部 */
+}
+
+.qrcode-close {
+    display: none; /* 隐藏旧关闭按钮 */
+}
+
+.close-icon {
+    display: none; /* 隐藏旧关闭图标 */
+}
+
+/* 二维码区域 */
+.qrcode-area {
+    width: 95%;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    overflow: hidden;
+    position: relative; /* 确保定位正确 */
+}
+
+.inline-qrcode-container {
+    background: linear-gradient(to bottom, #004299, #1976D2);
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    box-shadow: 0 8px 20px rgba(0, 66, 153, 0.2);
+    width: 100%; /* 确保宽度正确 */
+}
+
+.qrcode-title-area {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+.qrcode-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #FFFFFF;
+}
+
+.qrcode-content {
+    background-color: #FFFFFF;
+    padding: 15px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.qrcode-footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.qrcode-desc {
+    font-size: 16px;
+    color: #FFFFFF;
+}
+
+.qrcode-tip {
+    font-size: 12px;
+    color: rgba(255, 255, 255, 0.8);
+}
+
+/* 底部固定按钮 */
+.bottom-button {
+    position: fixed;
+    bottom: 30px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 85%;
+    background: linear-gradient(to right, #004299, #2A6DCF); /* 修改为重财蓝到辅助色1的渐变 */
+    padding: 14px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50px;
+    box-shadow: 0 4px 10px rgba(0, 66, 153, 0.25); /* 调整阴影颜色与主题色匹配 */
+    z-index: 10;
+}
+
+.button-content {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.qrcode-icon {
+    width: 22px;
+    height: 22px;
+    margin-right: 8px;
+    filter: brightness(0) saturate(100%) invert(100%); /* 转为白色 */
+}
+
+.button-text {
+    color: #FFFFFF;
+    font-size: 18px;
+    font-weight: 500;
+    letter-spacing: 1px;
+}
+
+/* SVG 图标颜色过滤器 */
+.svg-icon {
+    display: block;
+}
+
+/* 白色 #FFFFFF */
+.svg-white {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(207deg) brightness(105%) contrast(101%);
+}

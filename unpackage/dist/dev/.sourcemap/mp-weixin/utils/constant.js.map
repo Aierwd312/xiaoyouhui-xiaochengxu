@@ -1,0 +1,1 @@
+{"version":3,"file":"constant.js","sources":["utils/constant.js"],"sourcesContent":["const constant = {\r\n   avatar: 'vuex_avatar',\r\n   name: 'vuex_name',\r\n   roles: 'vuex_roles',\r\n   permissions: 'vuex_permissions'\r\n }\r\n\r\n export default constant\r\n"],"names":[],"mappings":";AAAK,MAAC,WAAW;AAAA,EACd,QAAQ;AAAA,EACR,MAAM;AAAA,EACN,OAAO;AAAA,EACP,aAAa;AAChB;;"}

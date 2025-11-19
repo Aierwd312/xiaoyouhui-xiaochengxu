@@ -1,0 +1,18 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "fui-icon": "../../components/firstui/fui-icon/fui-icon",
+    "fui-nav-bar": "../../components/firstui/fui-nav-bar/fui-nav-bar",
+    "fui-grid-item": "../../components/firstui/fui-grid-item/fui-grid-item",
+    "fui-grid": "../../components/firstui/fui-grid/fui-grid",
+    "fui-input": "../../components/firstui/fui-input/fui-input",
+    "fui-form-item": "../../components/firstui/fui-form-item/fui-form-item",
+    "fui-textarea": "../../components/firstui/fui-textarea/fui-textarea",
+    "fui-form": "../../components/firstui/fui-form/fui-form",
+    "fui-button": "../../components/firstui/fui-button/fui-button",
+    "fui-loadmore": "../../components/firstui/fui-loadmore/fui-loadmore",
+    "fui-picker": "../../components/firstui/fui-picker/fui-picker",
+    "fui-loading": "../../components/firstui/fui-loading/fui-loading",
+    "fui-dialog": "../../components/firstui/fui-dialog/fui-dialog"
+  }
+}

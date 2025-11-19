@@ -1,0 +1,10 @@
+{
+  "navigationStyle": "custom",
+  "usingComponents": {
+    "fui-icon": "../../components/firstui/fui-icon/fui-icon",
+    "fui-nav-bar": "../../components/firstui/fui-nav-bar/fui-nav-bar",
+    "fui-bottom-popup": "../../components/firstui/fui-bottom-popup/fui-bottom-popup",
+    "fui-actionsheet": "../../components/firstui/fui-actionsheet/fui-actionsheet",
+    "fui-dialog": "../../components/firstui/fui-dialog/fui-dialog"
+  }
+}

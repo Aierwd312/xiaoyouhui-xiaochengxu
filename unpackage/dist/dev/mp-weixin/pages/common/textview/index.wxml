@@ -1,0 +1,1 @@
+<view class="data-v-2c8ac270"><uni-card wx:if="{{b}}" u-s="{{['d']}}" class="view-title data-v-2c8ac270" u-i="2c8ac270-0" bind:__l="__l" u-p="{{b}}"><text class="uni-body view-content data-v-2c8ac270">{{a}}</text></uni-card></view>

@@ -1,0 +1,38 @@
+{
+  "pages": [
+    "pages/index/index",
+    "pages/login",
+    "pages/notificationsPage/notificationsPage",
+    "pages/userProfilePage/userProfilePage",
+    "pages/alumniCardPage/alumniCardPage",
+    "pages/discoverAlumniPage/discoverAlumniPage",
+    "pages/myFriendsPage/myFriendsPage",
+    "pages/myOrganizationsPage/myOrganizationsPage",
+    "pages/studentInfoPage/studentInfoPage",
+    "pages/archiveQueryPage/archiveQueryPage",
+    "pages/schoolActivitiesPage/schoolActivitiesPage",
+    "pages/schoolNewsPage/schoolNewsPage",
+    "pages/campusAccessApplicationPage/campusAccessApplicationPage",
+    "pages/giveBackToSchoolPage/giveBackToSchoolPage",
+    "pages/alumniServicesPage/alumniServicesPage",
+    "pages/mine/index",
+    "pages/mine/avatar/index",
+    "pages/mine/info/index",
+    "pages/mine/info/edit",
+    "pages/mine/pwd/index",
+    "pages/mine/setting/index",
+    "pages/mine/help/index",
+    "pages/mine/about/index",
+    "pages/common/webview/index",
+    "pages/common/textview/index",
+    "pages/feedbackPage/feedbackPage",
+    "pages/systemHelpPage/systemHelpPage"
+  ],
+  "window": {
+    "navigationBarTextStyle": "black",
+    "navigationBarTitleText": "重财校友会",
+    "navigationBarBackgroundColor": "#F8F8F8",
+    "backgroundColor": "#F0F4F8"
+  },
+  "usingComponents": {}
+}

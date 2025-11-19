@@ -1,0 +1,252 @@
+/* 全局样式 */
+page, view, text, image, button, input {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: "PingFang SC", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+/* 配色常量 - 微信小程序不支持CSS变量，使用注释标明颜色用途 */
+/* theme-color: #004299 - 主题色 - 深蓝色 */
+/* auxiliary-color-1: #2A6DCF - 辅助色1 */
+/* auxiliary-color-2: #79A6DC - 辅助色2 */
+/* accent-color-1: #FF9800 - 图标强调色1 - 橙色 */
+/* accent-color-2: #4CAF50 - 图标强调色2 - 绿色 */
+/* background-color: #F0F4F8 - 背景色 */
+/* card-color: #FFFFFF - 卡片背景 */
+/* text-color-main: #333333 - 主文字色 */
+/* text-color-secondary: #666666 - 次文字色 */
+/* text-color-hint: #999999 - 提示文字色 */
+/* divider-color: #EEEEEE - 分割线色 */
+/* alert-color: #FF5722 - 提醒/角标色 */
+/* 内容区域 */
+.content-area {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    overflow-y: auto;
+    padding-bottom: 32px;
+    background-color: var(--background-color-solid, #004299); /* 默认为主题色，可通过JS修改 */
+    background-image: var(--background-image);
+    background-size: cover;
+    background-position: center;
+    position: relative; /* 保持，以防未来需要绝对定位的子元素 */
+    z-index: 0; /* 保持 */
+}
+/* 卡片通用样式 */
+.card {
+    background-color: rgba(255, 255, 255, 0.9); /* 卡片背景可以保持一定的透明度以适应不同背景 */
+    border-radius: 12px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    /* backdrop-filter: blur(5px); */ /* 移除卡片模糊 */
+    /* -webkit-backdrop-filter: blur(5px); */ /* 移除卡片模糊 */
+    border: 1px solid rgba(255, 255, 255, 0.2); /* 边框可以调整得更细微 */
+}
+/* 通知栏卡片 */
+.notification-card {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px;
+}
+.notification-icon {
+    margin-right: 12px;
+}
+.notification-icon-inner {
+    width: 40rpx;
+    height: 40rpx;
+    /* color: #FF9800; */ /* ineffective for img src SVG, color is set by SVG file's fill attribute */
+}
+.notification-text {
+    flex-grow: 1;
+    font-size: 28rpx;
+    color: #333333;
+}
+.notification-action {
+    display: flex;
+    align-items: center;
+}
+.notification-action-icon {
+    width: 40rpx;
+    height: 40rpx;
+    /* color: #999999; */ /* ineffective for img src SVG */
+}
+/* 个人信息卡片 */
+.profile-card {
+    display: flex;
+    align-items: center;
+    padding: 20px;
+}
+/* ##名字与图标之间的间距 */
+.profile-avatar {
+    margin-right: 16px;
+}
+.avatar-image {
+    width: 160rpx;
+    height: 160rpx;
+    border-radius: 50%;
+}
+.profile-info {
+    flex-grow: 1;
+}
+.profile-name {
+    font-size: 48rpx;
+    font-weight: 600;
+    color: #333333;
+    margin-bottom: 16rpx;
+}
+.profile-verified {
+    display: inline-flex;
+    align-items: center;
+    background-color: #4CAF50;
+    border-radius: 12px;
+    padding: 4px 12px;
+}
+.verified-icon {
+    width: 32rpx;
+    height: 32rpx;
+    /* color: white; */ /* ineffective for img src SVG */
+    margin-right: 6px;
+}
+.verified-text {
+    font-size: 28rpx;
+    color: white;
+}
+.profile-action {
+    display: flex;
+    align-items: center;
+}
+.profile-action-icon {
+    width: 48rpx;
+    height: 48rpx;
+    /* color: #999999; */ /* ineffective for img src SVG */
+}
+/* 功能列表卡片 */
+.function-card {
+    overflow: hidden;
+}
+.function-item {
+    display: flex;
+    align-items: center;
+    padding: 12px 16px; /* 调整内边距 */
+}
+.function-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 72rpx;
+    height: 72rpx;
+    border-radius: 50%;
+    margin-right: 16px; /* 与 profile-avatar 的 margin-right 一致 */
+    flex-shrink: 0; /* 防止图标被压缩 */
+}
+/* 图标背景颜色 */
+.blue-icon {
+    background-color: rgba(42, 109, 207, 0.1);
+}
+.dark-blue-icon {
+    background-color: rgba(0, 66, 153, 0.1);
+}
+.red-icon {
+    background-color: rgba(255, 87, 34, 0.1);
+}
+.green-icon {
+    background-color: rgba(76, 175, 80, 0.1);
+}
+.gray-icon {
+    background-color: rgba(51, 51, 51, 0.1);
+}
+.light-blue-icon {
+    background-color: rgba(121, 166, 220, 0.1);
+}
+.orange-icon {
+    background-color: rgba(255, 152, 0, 0.1);
+}
+.function-text {
+    flex-grow: 1;
+    font-size: 32rpx;
+    color: #333333;
+    line-height: 1.5; /* 确保文字在垂直方向上更好地对齐和展示 */
+}
+.function-action {
+    position: relative;
+    margin-left: 16px; /* 在文本和箭头之间增加一些间距 */
+    flex-shrink: 0; /* 防止箭头被压缩 */
+}
+.function-action-icon {
+    width: 40rpx;
+    height: 40rpx;
+    /* color: #999999; */ /* ineffective for img src SVG */
+}
+.notification-dot::before {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 16rpx;
+    height: 16rpx;
+    border-radius: 50%;
+    background-color: #FF5722;
+}
+.divider {
+    height: 1px;
+    background-color: #EEEEEE;
+    /* margin-left: 128rpx; */ /* 原值 */
+    /* 新的 margin-left = 图标容器宽度 (72rpx) + 图标容器右边距 (16px, 约32rpx) */
+    /* 在uni-app中，rpx是动态的，px是固定的。为了精确对齐，通常建议在父级使用padding，让分割线100%宽度然后用伪元素定位，或者精确计算。 */
+    /* 另一种方法是让divider的margin-left基于function-icon的宽度+margin */
+    /* 我们已知 .function-icon width: 72rpx, margin-right: 16px. 16px 在大部分设备上约等于 32rpx */
+    /* 所以左侧空白是 16px(item padding) + 72rpx + 16px(icon margin) = 32px + 72rpx */
+    /* 这里我们先简单设置，让分割线从文本开始的地方 */
+    margin-left: calc(72rpx + 16px + 16px); /* 16px是左侧padding，72rpx是图标宽度，16px是图标右侧间距, 最后的16px是文本与图标的间距，确保分割线在文本下 */
+}
+/* 统一图标大小 */
+.icon {
+    width: 40rpx;
+    height: 40rpx;
+}
+/* SVG 图标颜色过滤器 */
+.svg-icon {
+    /* 确保图标正确显示 */
+    display: block;
+}
+/* 默认黑色 */
+.svg-icon {
+    filter: brightness(0) saturate(100%);
+}
+/* 深蓝色 - 主题色 #004299 */
+.svg-darkblue {
+    filter: brightness(0) saturate(100%) invert(16%) sepia(78%) saturate(3107%) hue-rotate(206deg) brightness(94%) contrast(101%);
+}
+/* 蓝色 - 辅助色1 #2A6DCF */
+.svg-blue {
+    filter: brightness(0) saturate(100%) invert(36%) sepia(44%) saturate(2419%) hue-rotate(200deg) brightness(91%) contrast(95%);
+}
+/* 浅蓝色 - 辅助色2 #79A6DC */
+.svg-lightblue {
+    filter: brightness(0) saturate(100%) invert(64%) sepia(17%) saturate(1009%) hue-rotate(187deg) brightness(95%) contrast(88%);
+}
+/* 橙色 - 图标强调色1 #FF9800 */
+.svg-orange {
+    filter: brightness(0) saturate(100%) invert(64%) sepia(68%) saturate(2809%) hue-rotate(360deg) brightness(103%) contrast(102%);
+}
+/* 绿色 - 图标强调色2 #4CAF50 */
+.svg-green {
+    filter: brightness(0) saturate(100%) invert(59%) sepia(10%) saturate(2606%) hue-rotate(75deg) brightness(94%) contrast(86%);
+}
+/* 红色 - 提醒角标色 #FF5722 */
+.svg-red {
+    filter: brightness(0) saturate(100%) invert(42%) sepia(93%) saturate(2242%) hue-rotate(356deg) brightness(102%) contrast(101%);
+}
+/* 灰色 - 主文字色 #333333 */
+.svg-gray {
+    filter: brightness(0) saturate(100%) invert(19%) sepia(0%) saturate(0%) hue-rotate(142deg) brightness(98%) contrast(90%);
+}
+/* 浅灰色 - 提示文字色 #999999 */
+.svg-hint {
+    filter: brightness(0) saturate(100%) invert(66%) sepia(0%) saturate(0%) hue-rotate(213deg) brightness(87%) contrast(81%);
+}
+/* 白色 #FFFFFF */
+.svg-white {
+    filter: brightness(0) saturate(100%) invert(100%) sepia(0%) saturate(0%) hue-rotate(207deg) brightness(105%) contrast(101%);
+}
