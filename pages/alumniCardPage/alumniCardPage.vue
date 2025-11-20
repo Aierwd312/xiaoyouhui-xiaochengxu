@@ -10,7 +10,8 @@
 			:isFixed="true"
 			:fontWeight="500"
 			@init="navbarInit"
-			@leftClick="goBack">
+			@leftClick="goBack"
+			@longpress="toggleTestMode">
 			<!-- 根据文档，左侧内容通过默认插槽实现 -->
 			<fui-icon name="arrowleft" :size="48" :color="navTitleColor"></fui-icon>
 		</fui-nav-bar>
@@ -87,7 +88,11 @@
 						<text class="qrcode-title">校友身份二维码</text>
 					</view>
 					<view class="qrcode-content">
+						<view v-if="loading" class="qrcode-loading">
+							<uni-load-more status="loading" :content-text="{contentdown: '生成中...', contentrefresh: '生成中...', contentnomore: '生成中...'}"></uni-load-more>
+						</view>
 						<fui-qrcode 
+							v-else-if="qrcodeValue"
 							:value="qrcodeValue" 
 							:width="240" 
 							:height="240"
@@ -95,12 +100,34 @@
 							background="#ffffff"
 							@ready="onQRCodeReady">
 						</fui-qrcode>
+						<view v-else class="qrcode-error">
+							<text class="error-text">二维码生成失败</text>
+							<view class="refresh-btn" @tap="generateQRCode">
+								<text class="refresh-text">重新生成</text>
+							</view>
+						</view>
 					</view>
 					<view class="qrcode-footer">
 						<text class="qrcode-desc">扫码验证校友身份</text>
 						<text class="qrcode-tip">二维码有效期30分钟，请勿外传</text>
+						<view class="qrcode-actions">
+							<view class="refresh-qrcode-btn" @tap="generateQRCode" :class="{disabled: loading}">
+								<image src="/static/refresh-line.svg" class="refresh-icon"></image>
+								<text class="refresh-btn-text">{{ loading ? '生成中...' : '刷新' }}</text>
+							</view>
+						</view>
 					</view>
 				</view>
+			</view>
+		</view>
+		
+		<!-- 调试按钮区域 -->
+		<view class="debug-buttons" v-if="testMode">
+			<view class="debug-btn" @tap="testAPIConnection">
+				<text class="debug-btn-text">测试API</text>
+			</view>
+			<view class="debug-btn" @tap="toggleTestMode">
+				<text class="debug-btn-text">关闭测试</text>
 			</view>
 		</view>
 		
@@ -110,6 +137,11 @@
 				<image src="/static/qr-code-line.svg" class="qrcode-icon"></image>
 				<text class="button-text">二维码</text>
 			</view>
+		</view>
+		
+		<!-- 测试模式开关（长按导航栏标题激活） -->
+		<view class="test-mode-indicator" v-if="testMode">
+			<text class="test-mode-text">测试模式</text>
 		</view>
 	</view>
 </template>

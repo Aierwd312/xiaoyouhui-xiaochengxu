@@ -126,7 +126,7 @@ const _sfc_main = {
           title: "通知",
           content: "确定注销并退出系统吗"
         }),
-        y: common_vendor.sr(popup, "57df0531-0", {
+        y: common_vendor.sr(popup, "feee6f96-0", {
           "k": "popup"
         }),
         z: common_vendor.p({

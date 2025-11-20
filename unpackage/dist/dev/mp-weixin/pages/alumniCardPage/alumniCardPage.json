@@ -5,6 +5,7 @@
     "fui-nav-bar": "../../components/firstui/fui-nav-bar/fui-nav-bar",
     "fui-col": "../../components/firstui/fui-col/fui-col",
     "fui-row": "../../components/firstui/fui-row/fui-row",
+    "uni-load-more": "../../uni_modules/uni-load-more/components/uni-load-more/uni-load-more",
     "fui-qrcode": "../../components/firstui/fui-qrcode/fui-qrcode"
   }
 }

@@ -16,6 +16,7 @@ if (!Math) {
   "./pages/archiveQueryPage/archiveQueryPage.js";
   "./pages/schoolActivitiesPage/schoolActivitiesPage.js";
   "./pages/schoolNewsPage/schoolNewsPage.js";
+  "./pages/newsDetailPage/newsDetailPage.js";
   "./pages/campusAccessApplicationPage/campusAccessApplicationPage.js";
   "./pages/giveBackToSchoolPage/giveBackToSchoolPage.js";
   "./pages/alumniServicesPage/alumniServicesPage.js";

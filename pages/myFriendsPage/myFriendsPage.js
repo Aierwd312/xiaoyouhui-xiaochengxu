@@ -1,6 +1,154 @@
 // myFriendsPage.js
 // 这个文件主要处理"我的好友"页面的数据和逻辑
 
+import { getStudentInfo, getStudentsList, getFriendsList, addFriend, removeFriend, getFriendRequests, handleFriendRequest, searchUsers } from '@/api/friends'
+
+// 获取学生详细信息
+export const getStudentDetail = async (studentId) => {
+    try {
+        const response = await getStudentInfo(studentId);
+        return response.data || {};
+    } catch (error) {
+        console.error('获取学生详细信息失败:', error);
+        throw error;
+    }
+};
+
+// 查询校友数据列表
+export const getAlumniList = async (queryParams = {}) => {
+    try {
+        const response = await getStudentsList(queryParams);
+        return {
+            total: response.total || 0,
+            list: response.rows || [],
+            code: response.code || 200,
+            message: response.msg || ''
+        };
+    } catch (error) {
+        console.error('查询校友数据列表失败:', error);
+        throw error;
+    }
+};
+
+// 构建校友查询参数
+export const buildAlumniQueryParams = ({
+    id = '',
+    name = '',
+    academy = '',
+    classname = '',
+    studentNumber = '',
+    grade = '',
+    idCard = '',
+    phone = '',
+    email = '',
+    industry = '',
+    company = '',
+    userId = null,
+    createdAt = '',
+    updatedAt = '',
+    createBy = '',
+    createTime = '',
+    updateBy = '',
+    updateTime = '',
+    remark = '',
+    params = {}
+} = {}) => {
+    const queryParams = {};
+    
+    // 只添加非空参数
+    if (id) queryParams.id = id;
+    if (name) queryParams.name = name;
+    if (academy) queryParams.academy = academy;
+    if (classname) queryParams.classname = classname;
+    if (studentNumber) queryParams.studentNumber = studentNumber;
+    if (grade) queryParams.grade = grade;
+    if (idCard) queryParams.idCard = idCard;
+    if (phone) queryParams.phone = phone;
+    if (email) queryParams.email = email;
+    if (industry) queryParams.industry = industry;
+    if (company) queryParams.company = company;
+    if (userId !== null) queryParams.userId = userId;
+    if (createdAt) queryParams.createdAt = createdAt;
+    if (updatedAt) queryParams.updatedAt = updatedAt;
+    if (createBy) queryParams.createBy = createBy;
+    if (createTime) queryParams.createTime = createTime;
+    if (updateBy) queryParams.updateBy = updateBy;
+    if (updateTime) queryParams.updateTime = updateTime;
+    if (remark) queryParams.remark = remark;
+    
+    // 添加其他参数
+    if (params && typeof params === 'object') {
+        Object.keys(params).forEach(key => {
+            if (params[key] !== undefined && params[key] !== null && params[key] !== '') {
+                queryParams[`params.${key}`] = params[key];
+            }
+        });
+    }
+    
+    return queryParams;
+};
+
+// 使用示例函数
+export const alumniListExample = async () => {
+    try {
+        // 示例1: 查询所有校友
+        const allAlumni = await getAlumniList();
+        console.log('所有校友:', allAlumni);
+        
+        // 示例2: 按条件查询校友
+        const queryParams = buildAlumniQueryParams({
+            name: '张三',
+            academy: '计算机学院',
+            grade: '2020',
+            industry: 'IT互联网'
+        });
+        const filteredAlumni = await getAlumniList(queryParams);
+        console.log('筛选后的校友:', filteredAlumni);
+        
+        // 示例3: 复杂查询
+        const complexQuery = buildAlumniQueryParams({
+            userId: 1,
+            company: '腾讯',
+            params: {
+                KEY: 'value'
+            }
+        });
+        const complexResult = await getAlumniList(complexQuery);
+        console.log('复杂查询结果:', complexResult);
+        
+        return {
+            allAlumni,
+            filteredAlumni,
+            complexResult
+        };
+    } catch (error) {
+        console.error('校友查询示例失败:', error);
+        throw error;
+    }
+};
+
+// 搜索用户
+export const searchFriends = async (keyword) => {
+    try {
+        const response = await searchUsers(keyword);
+        return response.data || [];
+    } catch (error) {
+        console.error('搜索用户失败:', error);
+        throw error;
+    }
+};
+
+// 添加好友
+export const addNewFriend = async (friendId) => {
+    try {
+        const response = await addFriend(friendId);
+        return response;
+    } catch (error) {
+        console.error('添加好友失败:', error);
+        throw error;
+    }
+};
+
 // 模拟好友分类数据
 const mockFriendCategories = [
     {
@@ -207,35 +355,38 @@ export const getFriendCategories = () => {
 };
 
 // 获取我的好友列表
-export const getMyFriends = () => {
-    return new Promise((resolve) => {
-        // 模拟API请求延迟
-        setTimeout(() => {
-            resolve(mockFriends);
-        }, 500);
-    });
+export const getMyFriends = async () => {
+    try {
+        const response = await getFriendsList();
+        return response.data || [];
+    } catch (error) {
+        console.error('获取好友列表失败:', error);
+        // 如果API调用失败，返回模拟数据作为备用
+        return mockFriends;
+    }
 };
 
 // 获取好友申请列表
-export const getFriendRequests = () => {
-    return new Promise((resolve) => {
-        // 模拟API请求延迟
-        setTimeout(() => {
-            resolve(mockFriendRequests);
-        }, 300);
-    });
+export const getMyFriendRequests = async () => {
+    try {
+        const response = await getFriendRequests();
+        return response.data || [];
+    } catch (error) {
+        console.error('获取好友申请列表失败:', error);
+        // 如果API调用失败，返回模拟数据作为备用
+        return mockFriendRequests;
+    }
 };
 
 // 删除好友
-export const deleteFriend = (friendId) => {
-    return new Promise((resolve) => {
-        // 模拟API请求延迟
-        setTimeout(() => {
-            // 实际应用中这里会调用后端API
-            console.log(`删除好友: ${friendId}`);
-            resolve({ success: true });
-        }, 800);
-    });
+export const deleteFriend = async (friendId) => {
+    try {
+        const response = await removeFriend(friendId);
+        return response;
+    } catch (error) {
+        console.error('删除好友失败:', error);
+        throw error;
+    }
 };
 
 // 移动好友到指定分组
@@ -306,23 +457,14 @@ export const renameCategory = (categoryCode, newName) => {
 };
 
 // 处理好友申请（接受/拒绝）
-export const handleFriendRequest = (requestId, action) => {
-    return new Promise((resolve) => {
-        // 模拟API请求延迟
-        setTimeout(() => {
-            // 实际应用中这里会调用后端API
-            console.log(`处理好友申请: ${requestId}, 动作: ${action}`);
-            
-            // 返回模拟数据，实际应用中应该从后端获取处理结果
-            const result = {
-                success: true,
-                requestId: requestId,
-                status: action === 'accept' ? 'accepted' : 'rejected'
-            };
-            
-            resolve(result);
-        }, 800);
-    });
+export const handleMyFriendRequest = async (requestId, action) => {
+    try {
+        const response = await handleFriendRequest(requestId, action);
+        return response;
+    } catch (error) {
+        console.error('处理好友申请失败:', error);
+        throw error;
+    }
 };
 
 // 清空好友验证信息

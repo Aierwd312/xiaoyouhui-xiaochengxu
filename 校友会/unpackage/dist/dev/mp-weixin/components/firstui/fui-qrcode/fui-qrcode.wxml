@@ -1,1 +1,0 @@
-<canvas wx:if="{{a}}" type="2d" canvas-id="{{b}}" id="{{c}}" style="{{'width:' + d + ';' + ('height:' + e)}}" bindlongtap="{{f}}" bindtouchstart="{{g}}" bindtouchend="{{h}}"></canvas>

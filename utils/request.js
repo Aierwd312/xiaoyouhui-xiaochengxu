@@ -58,11 +58,16 @@ const request = config => {
       })
       .catch(error => {
         let { message } = error
+        // 确保message是字符串，避免undefined错误
+        if (!message) {
+          message = error.toString() || '网络请求失败'
+        }
+        
         if (message === 'Network Error') {
           message = '后端接口连接异常'
-        } else if (message.includes('timeout')) {
+        } else if (message && message.includes('timeout')) {
           message = '系统接口请求超时'
-        } else if (message.includes('Request failed with status code')) {
+        } else if (message && message.includes('Request failed with status code')) {
           message = '系统接口' + message.substr(message.length - 3) + '异常'
         }
         toast(message)

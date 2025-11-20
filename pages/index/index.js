@@ -1,4 +1,5 @@
 import store from '@/store'
+import { getToken } from '@/utils/auth'
 
 export default {
 	data() {
@@ -144,7 +145,6 @@ export default {
 		 */
 		checkLoginAndRedirect() {
 			// 从utils/auth获取token
-			const { getToken } = require('@/utils/auth');
 			const token = getToken();
 			
 			if (!token) {

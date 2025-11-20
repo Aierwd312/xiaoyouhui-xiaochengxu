@@ -7293,7 +7293,7 @@ function isConsoleWritable() {
 function initRuntimeSocketService() {
   const hosts = "172.18.0.1,192.168.6.249,169.254.176.224,169.254.16.176,127.0.0.1";
   const port = "8090";
-  const id = "mp-weixin_jq6xT6";
+  const id = "mp-weixin_qxbkNb";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -8992,7 +8992,13 @@ const pages = [
   {
     path: "pages/schoolNewsPage/schoolNewsPage",
     style: {
-      navigationBarTitleText: ""
+      navigationStyle: "custom"
+    }
+  },
+  {
+    path: "pages/newsDetailPage/newsDetailPage",
+    style: {
+      navigationStyle: "custom"
     }
   },
   {

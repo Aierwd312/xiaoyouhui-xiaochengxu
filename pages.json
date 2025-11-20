@@ -90,7 +90,14 @@
 			"path" : "pages/schoolNewsPage/schoolNewsPage",
 			"style" : 
 			{
-				"navigationBarTitleText" : ""
+				"navigationStyle": "custom"
+			}
+		},
+		{
+			"path" : "pages/newsDetailPage/newsDetailPage",
+			"style" : 
+			{
+				"navigationStyle": "custom"
 			}
 		},
 		{

@@ -12,6 +12,7 @@
     "pages/archiveQueryPage/archiveQueryPage",
     "pages/schoolActivitiesPage/schoolActivitiesPage",
     "pages/schoolNewsPage/schoolNewsPage",
+    "pages/newsDetailPage/newsDetailPage",
     "pages/campusAccessApplicationPage/campusAccessApplicationPage",
     "pages/giveBackToSchoolPage/giveBackToSchoolPage",
     "pages/alumniServicesPage/alumniServicesPage",

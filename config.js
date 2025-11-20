@@ -1,7 +1,7 @@
 // 应用全局配置
 const config = {
    //cloud后台网关地址
-   baseUrl: 'http://localhost:18080',
+   baseUrl: 'http://10.155.10.148:8090/prod-api',
    // 应用信息
    appInfo: {
      // 应用名称

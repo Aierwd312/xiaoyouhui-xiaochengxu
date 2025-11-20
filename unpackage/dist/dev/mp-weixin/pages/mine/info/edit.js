@@ -124,7 +124,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       name: "sex",
       required: true
     }),
-    m: common_vendor.sr("form", "e768d9ac-0"),
+    m: common_vendor.sr("form", "16d797a4-0"),
     n: common_vendor.p({
       model: $data.user,
       labelWidth: "80px"

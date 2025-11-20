@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
+const api_friends = require("../../api/friends.js");
 const mockFriendCategories = [
   {
     code: "all",
@@ -197,45 +198,46 @@ const getFriendCategories = () => {
     }, 300);
   });
 };
-const getMyFriends = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(mockFriends);
-    }, 500);
-  });
+const getMyFriends = async () => {
+  try {
+    const response = await api_friends.getFriendsList();
+    return response.data || [];
+  } catch (error) {
+    common_vendor.index.__f__("error", "at pages/myFriendsPage/myFriendsPage.js:363", "获取好友列表失败:", error);
+    return mockFriends;
+  }
 };
-const getFriendRequests = () => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      resolve(mockFriendRequests);
-    }, 300);
-  });
+const getMyFriendRequests = async () => {
+  try {
+    const response = await api_friends.getFriendRequests();
+    return response.data || [];
+  } catch (error) {
+    common_vendor.index.__f__("error", "at pages/myFriendsPage/myFriendsPage.js:375", "获取好友申请列表失败:", error);
+    return mockFriendRequests;
+  }
 };
-const deleteFriend = (friendId) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      common_vendor.index.__f__("log", "at pages/myFriendsPage/myFriendsPage.js:235", `删除好友: ${friendId}`);
-      resolve({ success: true });
-    }, 800);
-  });
+const deleteFriend = async (friendId) => {
+  try {
+    const response = await api_friends.removeFriend(friendId);
+    return response;
+  } catch (error) {
+    common_vendor.index.__f__("error", "at pages/myFriendsPage/myFriendsPage.js:387", "删除好友失败:", error);
+    throw error;
+  }
 };
-const handleFriendRequest = (requestId, action) => {
-  return new Promise((resolve) => {
-    setTimeout(() => {
-      common_vendor.index.__f__("log", "at pages/myFriendsPage/myFriendsPage.js:314", `处理好友申请: ${requestId}, 动作: ${action}`);
-      const result = {
-        success: true,
-        requestId,
-        status: action === "accept" ? "accepted" : "rejected"
-      };
-      resolve(result);
-    }, 800);
-  });
+const handleMyFriendRequest = async (requestId, action) => {
+  try {
+    const response = await api_friends.handleFriendRequest(requestId, action);
+    return response;
+  } catch (error) {
+    common_vendor.index.__f__("error", "at pages/myFriendsPage/myFriendsPage.js:465", "处理好友申请失败:", error);
+    throw error;
+  }
 };
 const clearFriendRequests = () => {
   return new Promise((resolve) => {
     setTimeout(() => {
-      common_vendor.index.__f__("log", "at pages/myFriendsPage/myFriendsPage.js:334", "清空所有好友验证信息");
+      common_vendor.index.__f__("log", "at pages/myFriendsPage/myFriendsPage.js:476", "清空所有好友验证信息");
       const result = {
         success: true,
         message: "已清空所有验证信息"
@@ -301,7 +303,7 @@ const _sfc_main = {
     },
     // 加载好友申请
     loadFriendRequests() {
-      getFriendRequests().then((res) => {
+      getMyFriendRequests().then((res) => {
         this.friendRequests = res;
       }).catch((err) => {
         common_vendor.index.__f__("error", "at pages/myFriendsPage/myFriendsPage.vue:340", "获取好友申请失败", err);
@@ -316,7 +318,7 @@ const _sfc_main = {
       common_vendor.index.showLoading({
         title: action === "accept" ? "正在接受..." : "正在拒绝..."
       });
-      handleFriendRequest(requestId, action).then((res) => {
+      handleMyFriendRequest(requestId, action).then((res) => {
         if (res.success) {
           const index = this.friendRequests.findIndex((req) => req.id === requestId);
           if (index !== -1) {
@@ -399,6 +401,19 @@ const _sfc_main = {
           icon: "none"
         });
       });
+    },
+    // 筛选好友列表
+    filterFriends() {
+      if (this.isSearchMode) {
+        const searchText = this.searchText.toLowerCase();
+        this.currentFriends = this.allFriends.filter(
+          (friend) => friend.name.toLowerCase().includes(searchText) || friend.department.toLowerCase().includes(searchText) || friend.major.toLowerCase().includes(searchText)
+        );
+      } else if (this.selectedCategory) {
+        this.currentFriends = this.getCategoryFriends(this.selectedCategory.code);
+      } else {
+        this.currentFriends = this.allFriends;
+      }
     },
     // 分类与筛选
     toggleCategory(category) {
@@ -543,7 +558,7 @@ const _sfc_main = {
           icon: "success"
         });
       }).catch((err) => {
-        common_vendor.index.__f__("error", "at pages/myFriendsPage/myFriendsPage.vue:616", "删除好友失败", err);
+        common_vendor.index.__f__("error", "at pages/myFriendsPage/myFriendsPage.vue:635", "删除好友失败", err);
         common_vendor.index.showToast({
           title: "删除好友失败",
           icon: "none"
@@ -576,7 +591,7 @@ const _sfc_main = {
                 });
               }
             }).catch((err) => {
-              common_vendor.index.__f__("error", "at pages/myFriendsPage/myFriendsPage.vue:651", "清空验证信息失败", err);
+              common_vendor.index.__f__("error", "at pages/myFriendsPage/myFriendsPage.vue:670", "清空验证信息失败", err);
               common_vendor.index.showToast({
                 title: "清空失败，请重试",
                 icon: "none"
@@ -659,7 +674,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, !$data.isSearchMode ? {
     t: common_vendor.f($data.categories, (category, index, i0) => {
       return common_vendor.e({
-        a: "c79bb3d4-5-" + i0,
+        a: "27a368dc-5-" + i0,
         b: common_vendor.p({
           name: category.icon,
           color: category.color,
@@ -667,7 +682,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         c: common_vendor.t(category.name),
         d: common_vendor.t(category.count),
-        e: "c79bb3d4-6-" + i0,
+        e: "27a368dc-6-" + i0,
         f: $data.expandedCategory === category.code ? 1 : "",
         g: $data.expandedCategory === category.code ? 1 : "",
         h: common_vendor.o(($event) => $options.toggleCategory(category), index),
@@ -689,7 +704,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
           }, friend.major ? {
             h: common_vendor.t(friend.major)
           } : {}, {
-            i: "c79bb3d4-7-" + i0 + "-" + i1,
+            i: "27a368dc-7-" + i0 + "-" + i1,
             j: common_vendor.o(($event) => $options.showContactInfo(friend), friend.id),
             k: friend.id,
             l: common_vendor.o(($event) => $options.viewFriendDetail(friend), friend.id),
@@ -728,7 +743,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       }, friend.major ? {
         h: common_vendor.t(friend.major)
       } : {}, {
-        i: "c79bb3d4-8-" + i0,
+        i: "27a368dc-8-" + i0,
         j: common_vendor.o(($event) => $options.showContactInfo(friend), friend.id),
         k: friend.id,
         l: common_vendor.o(($event) => $options.viewFriendDetail(friend), friend.id),

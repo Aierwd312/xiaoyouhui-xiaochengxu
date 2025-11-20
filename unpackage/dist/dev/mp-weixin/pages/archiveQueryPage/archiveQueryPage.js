@@ -579,7 +579,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     e: common_vendor.f(_ctx.archiveTypes, (item, index, i0) => {
       return {
-        a: "7f12ddf8-4-" + i0 + "," + ("7f12ddf8-3-" + i0),
+        a: "0987a980-4-" + i0 + "," + ("0987a980-3-" + i0),
         b: common_vendor.p({
           name: item.icon,
           color: item.color,
@@ -589,7 +589,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         d: _ctx.selectedType === item.type ? 1 : "",
         e: index,
         f: common_vendor.o(($event) => _ctx.selectArchiveType(item), index),
-        g: "7f12ddf8-3-" + i0 + ",7f12ddf8-2"
+        g: "0987a980-3-" + i0 + ",0987a980-2"
       };
     }),
     f: common_vendor.p({
@@ -749,7 +749,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   } : {
     aa: common_vendor.f(_ctx.historyRequests, (record, index, i0) => {
       return common_vendor.e({
-        a: "7f12ddf8-30-" + i0,
+        a: "0987a980-30-" + i0,
         b: common_vendor.p({
           name: _ctx.getIconByType(record.type),
           color: _ctx.getColorByType(record.type),
@@ -778,7 +778,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         l: record.status === "completed"
       }, record.status === "completed" ? {
         m: common_vendor.o(($event) => _ctx.downloadResult(record.id), record.id),
-        n: "7f12ddf8-31-" + i0,
+        n: "0987a980-31-" + i0,
         o: common_vendor.p({
           type: "primary",
           background: _ctx.primaryColor,

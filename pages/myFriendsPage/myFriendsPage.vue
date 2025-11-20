@@ -265,8 +265,8 @@
 		getFriendCategories, 
 		deleteFriend, 
 		moveFriendToCategory,
-		getFriendRequests,
-		handleFriendRequest,
+		getMyFriendRequests,
+		handleMyFriendRequest,
 		clearFriendRequests
 	} from './myFriendsPage.js';
 	
@@ -334,7 +334,7 @@
 			
 			// 加载好友申请
 			loadFriendRequests() {
-				getFriendRequests().then(res => {
+				getMyFriendRequests().then(res => {
 					this.friendRequests = res;
 				}).catch(err => {
 					console.error('获取好友申请失败', err);
@@ -351,7 +351,7 @@
 					title: action === 'accept' ? '正在接受...' : '正在拒绝...'
 				});
 				
-				handleFriendRequest(requestId, action).then(res => {
+				handleMyFriendRequest(requestId, action).then(res => {
 					if (res.success) {
 						// 更新本地状态
 						const index = this.friendRequests.findIndex(req => req.id === requestId);
@@ -442,6 +442,25 @@
 						icon: 'none'
 					});
 				});
+			},
+			
+			// 筛选好友列表
+			filterFriends() {
+				if (this.isSearchMode) {
+					// 搜索模式下的筛选
+					const searchText = this.searchText.toLowerCase();
+					this.currentFriends = this.allFriends.filter(friend => 
+						friend.name.toLowerCase().includes(searchText) ||
+						friend.department.toLowerCase().includes(searchText) ||
+						friend.major.toLowerCase().includes(searchText)
+					);
+				} else if (this.selectedCategory) {
+					// 分类筛选
+					this.currentFriends = this.getCategoryFriends(this.selectedCategory.code);
+				} else {
+					// 显示所有好友
+					this.currentFriends = this.allFriends;
+				}
 			},
 			
 			// 分类与筛选

@@ -1,9 +1,0 @@
-{
-  "navigationBarTitleText": "重财校友会",
-  "navigationBarBackgroundColor": "#004299",
-  "navigationBarTextStyle": "white",
-  "navigationStyle": "custom",
-  "usingComponents": {
-    "fui-nav-bar": "../../components/firstui/fui-nav-bar/fui-nav-bar"
-  }
-}

@@ -1,6 +1,7 @@
 "use strict";
 const common_vendor = require("../../common/vendor.js");
 const store_index = require("../../store/index.js");
+const utils_auth = require("../../utils/auth.js");
 const common_assets = require("../../common/assets.js");
 const indexJs = {
   data() {
@@ -152,8 +153,7 @@ const indexJs = {
      * 检查登录状态并重定向
      */
     checkLoginAndRedirect() {
-      const { getToken } = require("@/utils/auth");
-      const token = getToken();
+      const token = utils_auth.getToken();
       if (!token) {
         common_vendor.index.__f__("log", "at pages/index/index.js:151", "首页检测到未登录，跳转到登录页");
         common_vendor.index.reLaunch({
@@ -332,14 +332,14 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     }),
     c: common_assets._imports_0,
     d: common_vendor.t(_ctx.notificationText),
-    e: common_assets._imports_1,
+    e: common_assets._imports_3,
     f: common_vendor.o((...args) => _ctx.handleNotificationClick && _ctx.handleNotificationClick(...args)),
     g: $setup.navHeight + "px",
     h: common_assets._imports_2,
     i: common_vendor.t(_ctx.userName),
     j: _ctx.isVerified
   }, _ctx.isVerified ? {} : {}, {
-    k: common_assets._imports_1,
+    k: common_assets._imports_3,
     l: common_vendor.o((...args) => _ctx.handleProfileClick && _ctx.handleProfileClick(...args)),
     m: common_vendor.f(_ctx.functionsPersonal, (item, index, i0) => {
       return common_vendor.e({
@@ -354,7 +354,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         h: item.ID
       });
     }),
-    n: common_assets._imports_1,
+    n: common_assets._imports_3,
     o: common_vendor.f(_ctx.functionsSchool, (item, index, i0) => {
       return common_vendor.e({
         a: "/static/" + item.icon + ".svg",
@@ -368,7 +368,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         h: item.ID
       });
     }),
-    p: common_assets._imports_1,
+    p: common_assets._imports_3,
     q: common_vendor.f(_ctx.functionsAccount, (item, index, i0) => {
       return common_vendor.e({
         a: "/static/" + item.icon + ".svg",
@@ -382,7 +382,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         h: item.ID
       });
     }),
-    r: common_assets._imports_1
+    r: common_assets._imports_3
   });
 }
 const MiniProgramPage = /* @__PURE__ */ common_vendor._export_sfc(_sfc_main, [["render", _sfc_render]]);

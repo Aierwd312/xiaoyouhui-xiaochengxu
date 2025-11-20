@@ -1,7 +1,0 @@
-{
-  "navigationStyle": "custom",
-  "usingComponents": {
-    "fui-icon": "../../components/firstui/fui-icon/fui-icon",
-    "fui-nav-bar": "../../components/firstui/fui-nav-bar/fui-nav-bar"
-  }
-}
