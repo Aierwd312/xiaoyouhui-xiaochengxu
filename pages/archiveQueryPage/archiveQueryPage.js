@@ -1,135 +1,69 @@
 import { ref, reactive } from 'vue';
+import { 
+	getArchiveApplicationList, 
+	addArchiveApplication, 
+	updateArchiveApplication, 
+	deleteArchiveApplication,
+	getArchiveApplicationDetail 
+} from '@/api/archives';
+import store from '@/store';
 
 export default {
 	data() {
 		return {
 			// 导航栏配置
-			navBackground: '#004299', // 导航栏背景色 - 重财蓝
-			navTitleColor: '#FFFFFF', // 导航栏标题颜色 - 白色
-			primaryColor: '#004299', // 主题色 - 重财蓝
+			navBackground: '#004299',
+			navTitleColor: '#FFFFFF',
+			primaryColor: '#004299',
 			
-			// 档案类型数据
-			archiveTypes: [
-				{
-					type: 'transcript',
-					name: '成绩单',
-					icon: 'file-list-3-line',
-					color: '#2A6DCF',
-					description: '在校期间的成绩记录'
-				},
-				{
-					type: 'diploma',
-					name: '学历证明',
-					icon: 'bookmark-3-line',
-					color: '#FF9800',
-					description: '毕业证书、学位证明等'
-				},
-				{
-					type: 'awards',
-					name: '获奖记录',
-					icon: 'award-line',
-					color: '#4CAF50',
-					description: '在校期间获得的各类奖项'
-				},
-				{
-					type: 'activity',
-					name: '社团活动',
-					icon: 'team-line',
-					color: '#79A6DC',
-					description: '参与过的社团和活动记录'
-				},
-				{
-					type: 'status',
-					name: '学籍信息',
-					icon: 'profile-line',
-					color: '#FF5722',
-					description: '在校学籍状态记录'
-				},
-				{
-					type: 'other',
-					name: '其他材料',
-					icon: 'folder-5-line',
-					color: '#333333',
-					description: '其他类型的档案材料'
-				}
-			],
-			
-			// 选择器数据
-			semesterOptions: [
-				{ value: 'all', text: '全部学期' },
-				{ value: 'year1', text: '第一学年' },
-				{ value: 'year2', text: '第二学年' },
-				{ value: 'year3', text: '第三学年' },
-				{ value: 'year4', text: '第四学年' },
-				{ value: '2025-2026-1', text: '2025-2026学年第一学期' },
-				{ value: '2025-2026-2', text: '2025-2026学年第二学期' },
-				{ value: '2026-2027-1', text: '2026-2027学年第一学期' },
-				{ value: '2026-2027-2', text: '2026-2027学年第二学期' }
-			],
-			
-			purposeOptions: [
-				{ value: 'further_study', text: '升学' },
-				{ value: 'employment', text: '就业' },
-				{ value: 'personal', text: '个人存档' },
-				{ value: 'other', text: '其他' }
-			],
-			
-			receiveMethodOptions: [
-				{ value: 'electronic', text: '电子档' },
-				{ value: 'paper', text: '纸质档(邮寄)' },
-				{ value: 'both', text: '两者都需要' }
-			],
-			
-			// 当前选择的档案类型
-			selectedType: null,
+			// 申请列表数据
+			applications: [],
 			
 			// 表单数据
 			formData: {
-				name: '', // 姓名（自动填充）
-				studentId: '', // 学号（自动填充）
-				enrollmentYear: '', // 入学年份（自动填充）
-				department: '', // 院系（自动填充）
-				semester: '', // 查询学期值
-				semesterText: '', // 查询学期显示文本
-				purpose: '', // 用途值
-				purposeText: '', // 用途显示文本
-				receiveMethod: '', // 接收方式值
-				receiveMethodText: '', // 接收方式显示文本
-				remarks: '', // 备注
-				phone: '', // 联系电话（自动填充但可修改）
-				address: '' // 邮寄地址（仅纸质档显示）
+				title: '', // 申请标题
+				applicationFile: '', // 申请材料
+				applicationReason: '', // 申请原因
+				applicationAnnexes: '', // 申请附件
+				sendType: '', // 接收方式值
+				sendTypeText: '', // 接收方式显示文本
+				email: '', // 电子邮箱
+				address: '', // 邮寄地址
+				phone: '', // 联系电话
+				remark: '' // 备注
+			},
+			
+			// 接收方式选项（字符串数组）
+			sendTypeOptions: ['电子档', '纸质档(邮寄)', '两者都需要'],
+			
+			// 接收方式映射
+			sendTypeMap: {
+				'电子档': 'electronic',
+				'纸质档(邮寄)': 'paper',
+				'两者都需要': 'both'
 			},
 			
 			// 选择器配置
 			pickerConfig: {
-				show: false, // 是否显示选择器
-				options: [], // 选择器选项
-				currentField: '' // 当前操作的字段
+				show: false,
+				options: [],
+				currentField: ''
 			},
 			
-			// 历史申请记录数据
-			historyRequests: [],
-			isHistoryExpanded: true, // 默认展开历史记录
-			isHistoryLoading: false, // 历史记录加载状态
-			
 			// 状态控制
-			isLoading: false, // 加载状态
-			showSuccess: false // 是否显示成功页面
+			isLoading: false, // 列表加载状态
+			isSubmitting: false, // 提交加载状态
+			showFormPopup: false, // 是否显示表单弹窗
+			formMode: 'add', // 表单模式：add-新增, edit-编辑
+			currentEditId: null // 当前编辑的申请ID
 		}
 	},
 	onLoad() {
-		// 初始化加载状态
-		this.isLoading = false;
-		this.isHistoryLoading = false;
-		
-		// 页面加载时获取用户信息和历史记录
-		this.fetchUserInfo();
-		this.fetchHistoryRequests();
+		this.loadApplications();
 	},
 	onShow() {
-		// 确保页面显示时处理中状态已关闭
-		this.isLoading = false;
-		this.isHistoryLoading = false;
+		// 页面重新显示时刷新列表
+		this.loadApplications();
 	},
 	methods: {
 		/**
@@ -142,25 +76,64 @@ export default {
 		},
 		
 		/**
-		 * 获取用户基本信息
+		 * 加载申请列表
 		 */
-		async fetchUserInfo() {
+		async loadApplications() {
 			try {
 				this.isLoading = true;
 				
-				// 这里是模拟API调用，实际应用中应该从服务器获取
-				await new Promise(resolve => setTimeout(resolve, 500));
+				// 获取当前用户ID（从store中获取）
+				const userInfo = store.getters.userInfo || {};
+				const userId = userInfo.userId || userInfo.id;
 				
-				// 模拟用户数据
-				this.formData.name = '张三';
-				this.formData.studentId = '202512345';
-				this.formData.enrollmentYear = '2025';
-				this.formData.department = '会计学院';
-				this.formData.phone = '13800138000';
+				console.log('=== 加载档案申请列表 ===');
+				console.log('用户信息:', userInfo);
+				console.log('用户ID:', userId);
+				
+				// 调用API获取列表 - 根据API文档优化查询参数
+				const queryParams = {
+					applicant: userId,
+					// 可以添加其他查询条件
+					// status: '', // 申请状态筛选
+					// title: '', // 标题筛选
+					// applicationFile: '', // 申请材料筛选
+				};
+				
+				console.log('查询参数:', queryParams);
+				const response = await getArchiveApplicationList(queryParams);
+				
+				// 处理返回数据 - 根据API响应结构
+				console.log('API响应:', response);
+				
+				if (response && response.code === 1) {
+					// 成功响应，处理数据
+					if (response.rows && Array.isArray(response.rows)) {
+						this.applications = response.rows.map(item => ({
+							...item,
+							status: this.mapStatus(item.status),
+							statusText: this.getStatusText(item.status)
+						}));
+						console.log('处理后的申请列表:', this.applications);
+						console.log('总记录数:', response.total);
+					} else {
+						this.applications = [];
+						console.log('无申请记录');
+					}
+				} else {
+					// 响应失败
+					this.applications = [];
+					const errorMsg = response?.msg || '获取列表失败';
+					console.error('API响应错误:', errorMsg);
+					uni.showToast({
+						title: errorMsg,
+						icon: 'none'
+					});
+				}
 			} catch (error) {
-				console.error('获取用户信息失败:', error);
+				console.error('加载申请列表失败:', error);
+				this.applications = [];
 				uni.showToast({
-					title: '获取用户信息失败',
+					title: '加载失败',
 					icon: 'none'
 				});
 			} finally {
@@ -169,145 +142,53 @@ export default {
 		},
 		
 		/**
-		 * 获取历史申请记录
+		 * 显示申请表单
 		 */
-		async fetchHistoryRequests() {
-			try {
-				this.isHistoryLoading = true;
-				
-				// 模拟API请求延迟
-				await new Promise(resolve => setTimeout(resolve, 1000));
-				
-				// 模拟数据，实际应从服务器获取
-				this.historyRequests = [
-					{
-						id: 'req001',
-						type: 'transcript',
-						typeName: '成绩单',
-						status: 'completed',
-						statusText: '已完成',
-						applyDate: '2025-09-15 14:30',
-						isExpanded: false, // 控制展开状态
-						details: {
-							semester: '2025-2026学年第一学期',
-							purpose: '升学',
-							receiveMethod: '电子档',
-							remarks: ''
-						},
-						resultUrl: 'https://example.com/results/transcript_001.pdf',
-						processingTime: '2025-09-16 10:25'
-					},
-					{
-						id: 'req002',
-						type: 'diploma',
-						typeName: '学历证明',
-						status: 'processing',
-						statusText: '处理中',
-						applyDate: '2025-09-20 11:45',
-						isExpanded: false,
-						details: {
-							purpose: '就业',
-							receiveMethod: '纸质档(邮寄)',
-							address: '重庆市南岸区学府大道19号 邮编: 400000',
-							remarks: '需要加盖学校公章'
-						}
-					},
-					{
-						id: 'req003',
-						type: 'awards',
-						typeName: '获奖记录',
-						status: 'pending',
-						statusText: '待处理',
-						applyDate: '2025-09-22 16:20',
-						isExpanded: false,
-						details: {
-							purpose: '个人存档',
-							receiveMethod: '电子档',
-							remarks: '包含所有奖学金及竞赛获奖情况'
-						}
-					},
-					{
-						id: 'req004',
-						type: 'status',
-						typeName: '学籍信息',
-						status: 'rejected',
-						statusText: '已拒绝',
-						applyDate: '2025-09-10 09:15',
-						isExpanded: false,
-						details: {
-							purpose: '其他',
-							receiveMethod: '电子档',
-							remarks: '需要完整的学籍变动记录'
-						},
-						rejectReason: '申请信息不完整，请重新提交并说明具体需要的学籍信息内容'
-					}
-				];
-			} catch (error) {
-				console.error('获取历史记录失败:', error);
-				uni.showToast({
-					title: '获取历史记录失败',
-					icon: 'none'
-				});
-			} finally {
-				this.isHistoryLoading = false;
-			}
+		showApplicationForm() {
+			this.formMode = 'add';
+			this.currentEditId = null;
+			this.resetFormData();
+			// 获取用户信息填充电话和邮箱
+			const userInfo = store.getters.userInfo || {};
+			this.formData.phone = userInfo.phonenumber || userInfo.phone || '';
+			this.formData.email = userInfo.email || '';
+			this.showFormPopup = true;
 		},
 		
 		/**
-		 * 选择档案类型
+		 * 关闭表单弹窗
 		 */
-		selectArchiveType(item) {
-			this.selectedType = item.type;
-			
-			// 重置表单特定字段
-			this.formData.semester = '';
-			this.formData.semesterText = '';
-			this.formData.purpose = '';
-			this.formData.purposeText = '';
-			this.formData.receiveMethod = '';
-			this.formData.receiveMethodText = '';
-			this.formData.address = '';
-			this.formData.remarks = '';
-			
-			// 滚动到表单区域
-			setTimeout(() => {
-				uni.pageScrollTo({
-					selector: '.form-section',
-					duration: 300
-				});
-			}, 100);
+		closeFormPopup() {
+			this.showFormPopup = false;
+			this.resetFormData();
 		},
 		
 		/**
-		 * 打开学期选择器
+		 * 重置表单数据
 		 */
-		showSemesterPicker() {
-			this.pickerConfig = {
-				show: true,
-				options: this.semesterOptions,
-				currentField: 'semester'
-			};
-		},
-		
-		/**
-		 * 打开用途选择器
-		 */
-		showPurposePicker() {
-			this.pickerConfig = {
-				show: true,
-				options: this.purposeOptions,
-				currentField: 'purpose'
+		resetFormData() {
+			this.formData = {
+				title: '',
+				applicationFile: '',
+				applicationReason: '',
+				applicationAnnexes: '',
+				sendType: '',
+				sendTypeText: '',
+				email: '',
+				address: '',
+				phone: '',
+				remark: ''
 			};
 		},
 		
 		/**
 		 * 打开接收方式选择器
 		 */
-		showReceiveMethodPicker() {
+		showSendTypePicker() {
 			this.pickerConfig = {
 				show: true,
-				options: this.receiveMethodOptions,
-				currentField: 'receiveMethod'
+				options: this.sendTypeOptions,
+				currentField: 'sendType'
 			};
 		},
 		
@@ -323,116 +204,68 @@ export default {
 		 */
 		onPickerConfirm(e) {
 			try {
-				const { value, text } = e.item[0];
-				const field = this.pickerConfig.currentField;
+				const selectedText = e.text; // 选中的文本
+				const selectedValue = this.sendTypeMap[selectedText]; // 映射到对应的值
 				
-				// 根据当前操作的字段更新表单数据
-				if (field === 'semester') {
-					this.formData.semester = value;
-					this.formData.semesterText = text;
-				} else if (field === 'purpose') {
-					this.formData.purpose = value;
-					this.formData.purposeText = text;
-				} else if (field === 'receiveMethod') {
-					this.formData.receiveMethod = value;
-					this.formData.receiveMethodText = text;
-				}
-				
+				// 先关闭选择器，避免布局冲突
 				this.closePicker();
+				
+				// 延迟更新数据，确保选择器完全关闭后再更新
+				setTimeout(() => {
+					this.formData.sendTypeText = selectedText;
+					this.formData.sendType = selectedValue;
+				}, 150);
 			} catch (error) {
-				console.error('选择器确认选择错误:', error);
-				uni.showToast({
-					title: '选择出错，请重试',
-					icon: 'none'
-				});
+				console.error('选择器确认错误:', error);
 				this.closePicker();
 			}
-		},
-		
-		/**
-		 * 切换历史记录区域展开/折叠
-		 */
-		toggleHistory() {
-			this.isHistoryExpanded = !this.isHistoryExpanded;
-		},
-		
-		/**
-		 * 切换记录详情展开/折叠
-		 */
-		toggleRecordDetail(index) {
-			// 切换当前点击的记录展开状态
-			this.historyRequests[index].isExpanded = !this.historyRequests[index].isExpanded;
-		},
-		
-		/**
-		 * 根据类型获取图标
-		 */
-		getIconByType(type) {
-			const typeItem = this.archiveTypes.find(item => item.type === type);
-			return typeItem ? typeItem.icon : 'file-list-3-line';
-		},
-		
-		/**
-		 * 根据类型获取颜色
-		 */
-		getColorByType(type) {
-			const typeItem = this.archiveTypes.find(item => item.type === type);
-			return typeItem ? typeItem.color : '#333333';
-		},
-		
-		/**
-		 * 获取详情字段标签
-		 */
-		getDetailLabel(key) {
-			const labelMap = {
-				'semester': '查询学期',
-				'purpose': '用途说明',
-				'receiveMethod': '接收方式',
-				'address': '邮寄地址',
-				'remarks': '其他说明'
-			};
-			
-			return labelMap[key] || key;
 		},
 		
 		/**
 		 * 下载查询结果
 		 */
-		async downloadResult(recordId) {
-			try {
-				// 使用单独的下载状态变量，避免影响全局加载状态
-				const record = this.historyRequests.find(item => item.id === recordId);
-				if (!record || !record.resultUrl) {
-					uni.showToast({
-						title: '下载链接无效',
-						icon: 'none'
-					});
-					return;
-				}
-				
-				// 显示下载中提示，但不影响全局loading状态
-				uni.showLoading({
-					title: '下载中...',
-					mask: true
-				});
-				
-				// 模拟下载过程
-				await new Promise(resolve => setTimeout(resolve, 1500));
-				
-				// 下载成功提示
-				uni.hideLoading();
+		downloadResult(recordId) {
+			const record = this.applications.find(item => item.id === recordId);
+			if (!record || !record.resultUrl) {
 				uni.showToast({
-					title: '下载成功',
-					icon: 'success'
-				});
-			} catch (error) {
-				console.error('下载结果错误:', error);
-				uni.hideLoading();
-				uni.showToast({
-					title: '下载失败，请重试',
+					title: '暂无可下载文件',
 					icon: 'none'
 				});
+				return;
 			}
+			
+			// 如果有下载链接，使用uni.downloadFile下载
+			uni.downloadFile({
+				url: record.resultUrl,
+				success: (res) => {
+					if (res.statusCode === 200) {
+						// 保存文件到本地
+						const filePath = res.tempFilePath;
+						uni.saveFile({
+							tempFilePath: filePath,
+							success: (saveRes) => {
+								uni.showToast({
+									title: '下载成功',
+									icon: 'success'
+								});
+							},
+							fail: () => {
+								uni.showToast({
+									title: '保存失败',
+									icon: 'none'
+								});
+							}
+						});
+					}
+				},
+				fail: (error) => {
+					console.error('下载失败:', error);
+					uni.showToast({
+						title: '下载失败',
+						icon: 'none'
+					});
+				}
+			});
 		},
 		
 		/**
@@ -445,26 +278,88 @@ export default {
 			}
 			
 			try {
-				this.isLoading = true;
+				this.isSubmitting = true;
 				
-				// 模拟提交请求
-				await new Promise(resolve => setTimeout(resolve, 1500));
+				// 获取当前用户信息
+				const userInfo = store.getters.userInfo || {};
+				const userId = userInfo.userId || userInfo.id;
+				const userName = userInfo.userName || userInfo.nickName || '';
 				
-				this.showSuccess = true;
+				// 检查用户信息
+				if (!userId) {
+					console.error('用户信息缺失，无法提交申请');
+					uni.showModal({
+						title: '提示',
+						content: '用户信息缺失，请重新登录后再试',
+						showCancel: false,
+						success: () => {
+							uni.reLaunch({ url: '/pages/login/login' });
+						}
+					});
+					return;
+				}
 				
-				// 重置表单
-				this.resetForm();
+				// 构建提交数据 - 完全匹配API示例结构
+				const submitData = {
+					title: this.formData.title,
+					applicant: userId,
+					applicantUserName: userName,
+					applicantNickName: userInfo.nickName || '',
+					deptId: userInfo.deptId || 1, // 默认为1
+					applicationFile: this.formData.applicationFile,
+					applicationReason: this.formData.applicationReason,
+					applicationAnnexes: this.formData.applicationAnnexes || '', // 申请附件
+					sendType: this.formData.sendType,
+					email: this.formData.email || userInfo.email || '',
+					address: this.formData.address || '',
+					phone: this.formData.phone,
+					status: '0', // 0-待审核
+					reviewer: null, // 审核人，新增时为空
+					reviewerName: '', // 审核人姓名
+					reviewComments: '', // 审核意见
+					createBy: userName, // 创建者
+					updateBy: userName, // 更新者
+					remark: this.formData.remark || '',
+					params: {
+						// 扩展参数，可用于存储额外信息
+					}
+				};
 				
-				// 刷新历史记录
-				this.fetchHistoryRequests();
+				// 打印调试信息
+				console.log('=== 档案申请提交调试信息 ===');
+				console.log('用户信息:', userInfo);
+				console.log('表单数据:', this.formData);
+				console.log('提交数据:', submitData);
+				console.log('API模式:', this.formMode === 'edit' ? '编辑' : '新增');
+				
+				// 根据是否为编辑模式调用不同API
+				if (this.formMode === 'edit' && this.currentEditId) {
+					submitData.id = this.currentEditId;
+					console.log('调用编辑API:', submitData);
+					const response = await updateArchiveApplication(submitData);
+					console.log('编辑API响应:', response);
+					uni.showToast({
+						title: '修改成功',
+						icon: 'success'
+					});
+				} else {
+					console.log('调用新增API:', submitData);
+					const response = await addArchiveApplication(submitData);
+					console.log('新增API响应:', response);
+					uni.showToast({
+						title: '提交成功',
+						icon: 'success'
+					});
+				}
+				this.loadApplications();
 			} catch (error) {
-				console.error('提交表单错误:', error);
+				console.error('提交错误:', error);
 				uni.showToast({
-					title: '提交失败，请重试',
+					title: this.formMode === 'edit' ? '修改失败' : '提交失败',
 					icon: 'none'
 				});
 			} finally {
-				this.isLoading = false;
+				this.isSubmitting = false;
 			}
 		},
 		
@@ -472,96 +367,201 @@ export default {
 		 * 表单验证
 		 */
 		validateForm() {
-			try {
-				// 检查必填字段
-				if (this.selectedType === 'transcript' && !this.formData.semester) {
-					uni.showToast({
-						title: '请选择查询学期',
-						icon: 'none'
-					});
-					return false;
-				}
-				
-				if (!this.formData.purpose) {
-					uni.showToast({
-						title: '请选择用途说明',
-						icon: 'none'
-					});
-					return false;
-				}
-				
-				if (!this.formData.receiveMethod) {
-					uni.showToast({
-						title: '请选择接收方式',
-						icon: 'none'
-					});
-					return false;
-				}
-				
-				// 如果选择了纸质档，检查地址
-				if ((this.formData.receiveMethod === 'paper' || this.formData.receiveMethod === 'both') && !this.formData.address) {
-					uni.showToast({
-						title: '请输入邮寄地址',
-						icon: 'none'
-					});
-					return false;
-				}
-				
-				// 检查电话
-				if (!this.formData.phone) {
-					uni.showToast({
-						title: '请输入联系电话',
-						icon: 'none'
-					});
-					return false;
-				}
-				
-				// 手机号格式验证
-				const phoneReg = /^1[3-9]\d{9}$/;
-				if (!phoneReg.test(this.formData.phone)) {
-					uni.showToast({
-						title: '请输入正确的手机号',
-						icon: 'none'
-					});
-					return false;
-				}
-				
-				return true;
-			} catch (error) {
-				console.error('表单验证错误:', error);
+			if (!this.formData.title) {
+				uni.showToast({
+					title: '请输入申请标题',
+					icon: 'none'
+				});
 				return false;
+			}
+			
+			if (!this.formData.applicationFile) {
+				uni.showToast({
+					title: '请输入申请材料名称',
+					icon: 'none'
+				});
+				return false;
+			}
+			
+			if (!this.formData.applicationReason) {
+				uni.showToast({
+					title: '请输入申请原因',
+					icon: 'none'
+				});
+				return false;
+			}
+			
+			if (!this.formData.sendType) {
+				uni.showToast({
+					title: '请选择接收方式',
+					icon: 'none'
+				});
+				return false;
+			}
+			
+			// 验证电子邮箱（电子档或两者都需要时必填）
+			if ((this.formData.sendType === 'electronic' || this.formData.sendType === 'both') && !this.formData.email) {
+				uni.showToast({
+					title: '请输入电子邮箱',
+					icon: 'none'
+				});
+				return false;
+			}
+			
+			// 验证邮箱格式
+			if (this.formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.formData.email)) {
+				uni.showToast({
+					title: '请输入正确的邮箱格式',
+					icon: 'none'
+				});
+				return false;
+			}
+			
+			if ((this.formData.sendType === 'paper' || this.formData.sendType === 'both') && !this.formData.address) {
+				uni.showToast({
+					title: '请输入邮寄地址',
+					icon: 'none'
+				});
+				return false;
+			}
+			
+			if (!this.formData.phone) {
+				uni.showToast({
+					title: '请输入联系电话',
+					icon: 'none'
+				});
+				return false;
+			}
+			
+			const phoneReg = /^1[3-9]\d{9}$/;
+			if (!phoneReg.test(this.formData.phone)) {
+				uni.showToast({
+					title: '请输入正确的手机号',
+					icon: 'none'
+				});
+				return false;
+			}
+			
+			return true;
+		},
+		
+		/**
+		 * 编辑档案申请
+		 */
+		editApplication(app) {
+			this.formMode = 'edit';
+			this.currentEditId = app.id;
+			
+			// 填充表单数据
+			const sendTypeText = Object.keys(this.sendTypeMap).find(key => this.sendTypeMap[key] === app.sendType) || '';
+			
+			this.formData = {
+				title: app.title || '',
+				applicationFile: app.applicationFile || '',
+				applicationReason: app.applicationReason || '',
+				applicationAnnexes: app.applicationAnnexes || '',
+				sendType: app.sendType || '',
+				sendTypeText: sendTypeText,
+				email: app.email || '',
+				address: app.address || '',
+				phone: app.phone || '',
+				remark: app.remark || ''
+			};
+			
+			// 显示表单
+			this.showFormPopup = true;
+		},
+		
+		/**
+		 * 撤回档案申请
+		 */
+		async withdrawApplication(appId) {
+			try {
+				const confirmResult = await new Promise((resolve) => {
+					uni.showModal({
+						title: '确认撤回',
+						content: '确定要撤回这条申请吗？',
+						success: (res) => resolve(res.confirm),
+						fail: () => resolve(false)
+					});
+				});
+				
+				if (!confirmResult) return;
+				
+				// 撤回即删除
+				await deleteArchiveApplication(appId);
+				
+				uni.showToast({
+					title: '已撤回',
+					icon: 'success'
+				});
+				
+				this.loadApplications();
+			} catch (error) {
+				console.error('撤回失败:', error);
+				uni.showToast({
+					title: '撤回失败',
+					icon: 'none'
+				});
 			}
 		},
 		
 		/**
-		 * 重置表单
+		 * 删除档案申请
 		 */
-		resetForm() {
-			this.selectedType = null;
-			this.formData.semester = '';
-			this.formData.semesterText = '';
-			this.formData.purpose = '';
-			this.formData.purposeText = '';
-			this.formData.receiveMethod = '';
-			this.formData.receiveMethodText = '';
-			this.formData.address = '';
-			this.formData.remarks = '';
-			
-			// 滚动到页面顶部
-			uni.pageScrollTo({
-				scrollTop: 0,
-				duration: 300
-			});
+		async deleteApplication(appId) {
+			try {
+				const confirmResult = await new Promise((resolve) => {
+					uni.showModal({
+						title: '确认删除',
+						content: '确定要删除这条申请吗？删除后将无法恢复。',
+						success: (res) => resolve(res.confirm),
+						fail: () => resolve(false)
+					});
+				});
+				
+				if (!confirmResult) return;
+				
+				await deleteArchiveApplication(appId);
+				
+				uni.showToast({
+					title: '删除成功',
+					icon: 'success'
+				});
+				
+				this.loadApplications();
+			} catch (error) {
+				console.error('删除申请错误:', error);
+				uni.hideLoading();
+				uni.showToast({
+					title: '删除失败，请重试',
+					icon: 'none'
+				});
+			}
 		},
 		
 		/**
-		 * 关闭成功提示
+		 * 映射状态值
 		 */
-		onSuccessClose() {
-			this.showSuccess = false;
-			
-			// 刷新历史记录
-			this.fetchHistoryRequests();
+		mapStatus(statusValue) {
+			const statusMap = {
+				'0': 'pending',
+				'1': 'completed',
+				'2': 'rejected'
+			};
+			return statusMap[String(statusValue)] || 'pending';
+		},
+		
+		/**
+		 * 获取状态文本
+		 */
+		getStatusText(statusValue) {
+			const textMap = {
+				'0': '待审核',
+				'1': '已通过',
+				'2': '已拒绝'
+			};
+			return textMap[String(statusValue)] || '待审核';
 		}
 	}
 }

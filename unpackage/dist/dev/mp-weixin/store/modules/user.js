@@ -9,6 +9,7 @@ const user = {
   state: {
     token: utils_auth.getToken(),
     name: utils_storage.storage.get(utils_constant.constant.name),
+    nickName: utils_storage.storage.get(utils_constant.constant.nickName),
     avatar: utils_storage.storage.get(utils_constant.constant.avatar),
     roles: utils_storage.storage.get(utils_constant.constant.roles),
     permissions: utils_storage.storage.get(utils_constant.constant.permissions)
@@ -20,6 +21,10 @@ const user = {
     SET_NAME: (state, name) => {
       state.name = name;
       utils_storage.storage.set(utils_constant.constant.name, name);
+    },
+    SET_NICKNAME: (state, nickName) => {
+      state.nickName = nickName;
+      utils_storage.storage.set(utils_constant.constant.nickName, nickName);
     },
     SET_AVATAR: (state, avatar) => {
       state.avatar = avatar;
@@ -58,6 +63,7 @@ const user = {
           const user2 = res.user;
           const avatar = user2 == null || user2.avatar == "" || user2.avatar == null ? "/static/images/profile.jpg" : user2.avatar;
           const username = user2 == null || user2.userName == "" || user2.userName == null ? "" : user2.userName;
+          const nickName = user2 == null || user2.nickName == "" || user2.nickName == null ? "" : user2.nickName;
           if (res.roles && res.roles.length > 0) {
             commit("SET_ROLES", res.roles);
             commit("SET_PERMISSIONS", res.permissions);
@@ -65,6 +71,7 @@ const user = {
             commit("SET_ROLES", ["ROLE_DEFAULT"]);
           }
           commit("SET_NAME", username);
+          commit("SET_NICKNAME", nickName);
           commit("SET_AVATAR", avatar);
           resolve(res);
         }).catch((error) => {

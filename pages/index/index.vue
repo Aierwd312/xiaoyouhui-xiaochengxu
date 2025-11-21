@@ -31,7 +31,7 @@
 				<image src="/static/school-badge.svg" class="avatar-image svg-icon svg-darkblue"></image>
 			</view>
 			<view class="profile-info">
-				<view class="profile-name">{{ userName }}</view>
+				<view class="profile-name">{{ nickName }}</view>
 				<view class="profile-verified" v-if="isVerified">
 					<!-- <fui-icon name="shield-check-fill" class="verified-icon"></fui-icon> -->
 					<!-- <image src="/static/shield-check-fill.svg" class="verified-icon svg-icon svg-white"></image> -->

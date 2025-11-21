@@ -4,7 +4,7 @@ import { getToken } from '@/utils/auth'
 export default {
 	data() {
 		return {
-			userName: store.state.user.name || '未登录', // 用户名
+			nickName: store.getters.nickName || '未登录', // 用户昵称
 			isVerified: true, // 是否已认证
 			notificationText: '最新福利通知：校友专享优惠活动开启', // 通知文本
 			navBackground: '#004299', // 导航栏背景色 - 默认为主题色
@@ -160,10 +160,25 @@ export default {
 		/**
 		 * 更新用户信息
 		 */
-		updateUserInfo() {
-			// 从store中获取最新的用户信息
-			this.userName = store.state.user.name || '未登录';
-			console.log('更新用户名:', this.userName);
+		async updateUserInfo() {
+			try {
+				// 先尝试从store获取用户信息
+				let nickName = store.getters.nickName;
+				
+				// 如果store中没有用户信息，则调用API获取
+				if (!nickName) {
+					console.log('store中无用户信息，正在获取...');
+					await store.dispatch('GetInfo');
+					nickName = store.getters.nickName;
+				}
+				
+				this.nickName = nickName || '未登录';
+				console.log('更新昵称:', this.nickName);
+				console.log('完整用户信息:', store.getters.userInfo);
+			} catch (error) {
+				console.error('获取用户信息失败:', error);
+				this.nickName = '获取失败';
+			}
 		},
 		
 		/**

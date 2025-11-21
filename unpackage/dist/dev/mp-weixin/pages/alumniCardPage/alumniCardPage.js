@@ -2,6 +2,7 @@
 const common_vendor = require("../../common/vendor.js");
 const api_alumniCard = require("../../api/alumniCard.js");
 const utils_common = require("../../utils/common.js");
+const store_index = require("../../store/index.js");
 const common_assets = require("../../common/assets.js");
 const alumniCardPageJs = {
   data() {
@@ -69,13 +70,13 @@ const alumniCardPageJs = {
           title: "加载中..."
         });
         loadingShown = true;
-        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:69", "开始获取用户校友信息...");
+        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:70", "开始获取用户校友信息...");
         if (this.testMode) {
-          common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:73", "测试模式：使用模拟用户信息");
+          common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:74", "测试模式：使用模拟用户信息");
+          const nickName2 = store_index.store.state.user.nickName || "校友";
           const mockUserInfo = {
             code: 200,
             data: {
-              name: "张三",
               enrollmentYear: "2020",
               educationType: "本科",
               faculty: "计算机学院",
@@ -84,34 +85,35 @@ const alumniCardPageJs = {
             msg: "获取成功"
           };
           await new Promise((resolve) => setTimeout(resolve, 500));
-          common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:89", "模拟用户信息响应:", mockUserInfo);
+          common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:91", "模拟用户信息响应:", mockUserInfo);
           if (mockUserInfo.code === 200 && mockUserInfo.data) {
             this.userInfo = {
-              name: mockUserInfo.data.name || "",
+              name: nickName2,
               enrollmentYear: mockUserInfo.data.enrollmentYear || "",
               educationType: mockUserInfo.data.educationType || "",
               faculty: mockUserInfo.data.faculty || "",
               avatar: mockUserInfo.data.avatar || ""
             };
-            common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:99", "用户信息加载成功:", this.userInfo);
+            common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:101", "用户信息加载成功:", this.userInfo);
             return;
           }
         }
+        const nickName = store_index.store.state.user.nickName || "校友";
         const userInfoRes = await api_alumniCard.getAlumniInfo();
-        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:107", "用户信息API响应:", userInfoRes);
+        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:112", "用户信息API响应:", userInfoRes);
         if (userInfoRes && userInfoRes.code === 200 && userInfoRes.data) {
           this.userInfo = {
-            name: userInfoRes.data.name || "",
+            name: nickName,
             enrollmentYear: userInfoRes.data.enrollmentYear || "",
             educationType: userInfoRes.data.educationType || "",
             faculty: userInfoRes.data.faculty || "",
             avatar: userInfoRes.data.avatar || ""
           };
-          common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:117", "用户信息加载成功:", this.userInfo);
+          common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:122", "用户信息加载成功:", this.userInfo);
         } else {
-          common_vendor.index.__f__("warn", "at pages/alumniCardPage/alumniCardPage.js:119", "用户信息API返回异常，使用默认值");
+          common_vendor.index.__f__("warn", "at pages/alumniCardPage/alumniCardPage.js:124", "用户信息API返回异常，使用默认值");
           this.userInfo = {
-            name: "校友",
+            name: nickName,
             enrollmentYear: "未知",
             educationType: "未知",
             faculty: "未知",
@@ -119,9 +121,10 @@ const alumniCardPageJs = {
           };
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/alumniCardPage/alumniCardPage.js:130", "获取用户信息失败:", error);
+        common_vendor.index.__f__("error", "at pages/alumniCardPage/alumniCardPage.js:135", "获取用户信息失败:", error);
+        const nickName = store_index.store.state.user.nickName || "校友";
         this.userInfo = {
-          name: "校友",
+          name: nickName,
           enrollmentYear: "未知",
           educationType: "未知",
           faculty: "未知",
@@ -146,9 +149,9 @@ const alumniCardPageJs = {
           title: "生成二维码中..."
         });
         loadingShown = true;
-        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:161", "开始调用二维码生成API...");
+        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:168", "开始调用二维码生成API...");
         if (this.testMode) {
-          common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:165", "测试模式：使用模拟二维码数据");
+          common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:172", "测试模式：使用模拟二维码数据");
           const mockResponse = {
             code: 200,
             data: {
@@ -157,20 +160,20 @@ const alumniCardPageJs = {
             msg: "生成成功"
           };
           await new Promise((resolve) => setTimeout(resolve, 1e3));
-          common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:177", "模拟API响应:", mockResponse);
+          common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:184", "模拟API响应:", mockResponse);
           if (mockResponse.code === 200 && mockResponse.data && mockResponse.data.qrcode) {
             this.qrcodeValue = mockResponse.data.qrcode;
             const expireTime = Date.now() + 30 * 60 * 1e3;
             this.qrcodeExpireTime = expireTime;
             this.setExpirationReminder();
             this.setAutoRefresh();
-            common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:192", "二维码生成成功:", this.qrcodeValue);
+            common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:199", "二维码生成成功:", this.qrcodeValue);
             utils_common.toast("二维码生成成功");
             return;
           }
         }
         const response = await api_alumniCard.generateQRCode();
-        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:201", "API响应:", response);
+        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:208", "API响应:", response);
         if (typeof response === "string" && response.includes("RuoYi")) {
           throw new Error("API返回了欢迎页面，请检查API地址和端口配置");
         }
@@ -187,7 +190,7 @@ const alumniCardPageJs = {
             this.qrcodeExpireTime = expireTime;
             this.setExpirationReminder();
             this.setAutoRefresh();
-            common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:230", "二维码生成成功:", qrcodeData);
+            common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:237", "二维码生成成功:", qrcodeData);
             utils_common.toast("二维码生成成功");
           } else {
             throw new Error("服务器返回的二维码数据格式不正确");
@@ -197,7 +200,7 @@ const alumniCardPageJs = {
           throw new Error(errorMsg);
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/alumniCardPage/alumniCardPage.js:240", "生成二维码失败:", error);
+        common_vendor.index.__f__("error", "at pages/alumniCardPage/alumniCardPage.js:247", "生成二维码失败:", error);
         let errorMessage = "生成二维码失败";
         if (error.message) {
           if (error.message.includes("timeout")) {
@@ -273,7 +276,7 @@ const alumniCardPageJs = {
     toggleTestMode() {
       this.testMode = !this.testMode;
       utils_common.toast(`测试模式已${this.testMode ? "开启" : "关闭"}`);
-      common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:335", "测试模式:", this.testMode ? "开启" : "关闭");
+      common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:342", "测试模式:", this.testMode ? "开启" : "关闭");
     },
     /**
      * 测试API连接
@@ -283,10 +286,10 @@ const alumniCardPageJs = {
         common_vendor.index.showLoading({
           title: "测试API连接..."
         });
-        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:347", "开始测试API连接...");
-        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:348", "API地址: http://10.155.10.148:8082/core/studentInfo/QRCode");
+        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:354", "开始测试API连接...");
+        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:355", "API地址: http://10.155.10.148:8082/core/studentInfo/QRCode");
         const response = await api_alumniCard.generateQRCode();
-        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:353", "API测试响应:", response);
+        common_vendor.index.__f__("log", "at pages/alumniCardPage/alumniCardPage.js:360", "API测试响应:", response);
         if (response) {
           if (typeof response === "string") {
             if (response.includes("RuoYi")) {
@@ -303,7 +306,7 @@ const alumniCardPageJs = {
           utils_common.toast("API无响应");
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/alumniCardPage/alumniCardPage.js:371", "API测试失败:", error);
+        common_vendor.index.__f__("error", "at pages/alumniCardPage/alumniCardPage.js:378", "API测试失败:", error);
         utils_common.toast(`API测试失败: ${error.message}`);
       } finally {
         common_vendor.index.hideLoading();
@@ -373,7 +376,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       isFixed: true,
       fontWeight: 500
     }),
-    f: common_assets._imports_0$1,
+    f: common_assets._imports_0$2,
     g: common_vendor.p({
       span: 8
     }),
@@ -437,7 +440,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     D: common_vendor.o((...args) => _ctx.generateQRCode && _ctx.generateQRCode(...args))
   }, {
     A: _ctx.qrcodeValue,
-    E: common_assets._imports_2$2,
+    E: common_assets._imports_2$1,
     F: common_vendor.t(_ctx.loading ? "生成中..." : "刷新"),
     G: common_vendor.o((...args) => _ctx.generateQRCode && _ctx.generateQRCode(...args)),
     H: _ctx.loading ? 1 : ""
@@ -448,7 +451,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     K: common_vendor.o((...args) => _ctx.testAPIConnection && _ctx.testAPIConnection(...args)),
     L: common_vendor.o((...args) => _ctx.toggleTestMode && _ctx.toggleTestMode(...args))
   } : {}, {
-    M: common_assets._imports_2$1,
+    M: common_assets._imports_2,
     N: common_vendor.o((...args) => _ctx.toggleQRCode && _ctx.toggleQRCode(...args)),
     O: _ctx.testMode
   }, _ctx.testMode ? {} : {});

@@ -16,15 +16,15 @@ if (!Math) {
 const _sfc_main = {
   __name: "index",
   setup(__props) {
-    const name = store_index.store.state.user.name;
+    const name = store_index.store.state.user.nickName;
     config.config.appInfo.version;
     const avatar = common_vendor.ref(store_index.store.state.user.avatar);
-    const windowHeight = common_vendor.ref(common_vendor.index.getSystemInfoSync().windowHeight - 50);
+    common_vendor.ref(common_vendor.index.getSystemInfoSync().windowHeight - 50);
     const popup = common_vendor.ref(null);
     common_vendor.index.$on("refresh", () => {
       avatar.value = store_index.store.state.user.avatar;
     });
-    common_vendor.index.__f__("log", "at pages/mine/index.vue:112", avatar.value);
+    common_vendor.index.__f__("log", "at pages/mine/index.vue:140", avatar.value);
     function handleToInfo() {
       common_vendor.index.navigateTo({
         url: "/pages/mine/info/index"
@@ -90,46 +90,40 @@ const _sfc_main = {
     }
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: !avatar.value
-      }, !avatar.value ? {} : {}, {
-        b: avatar.value
+        a: avatar.value
       }, avatar.value ? {
-        c: common_vendor.o(handleToAvatar),
-        d: avatar.value
+        b: avatar.value
       } : {}, {
-        e: !common_vendor.unref(name)
+        c: common_vendor.o(($event) => avatar.value ? handleToAvatar() : handleToLogin()),
+        d: !common_vendor.unref(name)
       }, !common_vendor.unref(name) ? {
-        f: common_vendor.o(handleToLogin)
-      } : {}, {
-        g: common_vendor.unref(name)
-      }, common_vendor.unref(name) ? {
-        h: common_vendor.t(common_vendor.unref(name)),
-        i: common_vendor.o(handleToInfo)
-      } : {}, {
-        j: common_vendor.o(handleToInfo),
-        k: common_vendor.o(handleJiaoLiuQun),
-        l: common_vendor.o(handleBuilding),
-        m: common_vendor.o(handleBuilding),
-        n: common_vendor.o(handleBuilding),
-        o: common_vendor.o(handleToEditInfo),
-        p: common_vendor.o(handleHelp),
-        q: common_vendor.o(handleAbout),
-        r: common_vendor.o(handleToSetting),
-        s: common_vendor.o(handleLogout),
-        t: `${windowHeight.value}px`,
-        v: common_vendor.o(dialogConfirm),
-        w: common_vendor.o(dialogClose),
-        x: common_vendor.p({
+        e: common_vendor.o(handleToLogin)
+      } : {
+        f: common_vendor.t(common_vendor.unref(name)),
+        g: common_vendor.o(handleToInfo)
+      }, {
+        h: common_vendor.o(handleJiaoLiuQun),
+        i: common_vendor.o(handleBuilding),
+        j: common_vendor.o(handleBuilding),
+        k: common_vendor.o(handleBuilding),
+        l: common_vendor.o(handleToEditInfo),
+        m: common_vendor.o(handleHelp),
+        n: common_vendor.o(handleAbout),
+        o: common_vendor.o(handleToSetting),
+        p: common_vendor.o(handleLogout),
+        q: common_vendor.o(dialogConfirm),
+        r: common_vendor.o(dialogClose),
+        s: common_vendor.p({
           type: "info",
           cancelText: "关闭",
           confirmText: "退出",
           title: "通知",
           content: "确定注销并退出系统吗"
         }),
-        y: common_vendor.sr(popup, "feee6f96-0", {
+        t: common_vendor.sr(popup, "feee6f96-0", {
           "k": "popup"
         }),
-        z: common_vendor.p({
+        v: common_vendor.p({
           type: "dialog"
         })
       });

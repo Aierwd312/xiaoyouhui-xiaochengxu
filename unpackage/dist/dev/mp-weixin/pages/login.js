@@ -1,5 +1,6 @@
 "use strict";
 const common_vendor = require("../common/vendor.js");
+const common_assets = require("../common/assets.js");
 const api_login = require("../api/login.js");
 require("../store/modules/user.js");
 const config = require("../config.js");
@@ -11,8 +12,8 @@ const _sfc_main = {
     const captchaEnabled = common_vendor.ref(true);
     const globalConfig = common_vendor.ref(config.config);
     const loginForm = common_vendor.ref({
-      username: "admin",
-      password: "admin123",
+      username: "",
+      password: "",
       code: "",
       uuid: ""
     });
@@ -84,7 +85,7 @@ const _sfc_main = {
     getCode();
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: globalConfig.value.appInfo.logo,
+        a: common_assets._imports_0$1,
         b: loginForm.value.username,
         c: common_vendor.o(($event) => loginForm.value.username = $event.detail.value),
         d: loginForm.value.password,

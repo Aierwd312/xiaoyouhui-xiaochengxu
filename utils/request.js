@@ -21,14 +21,26 @@ const request = config => {
     config.url = url
   }
   return new Promise((resolve, reject) => {
+    const requestUrl = config.baseUrl ? config.baseUrl + config.url : baseUrl + config.url;
+    
+    // 打印请求调试信息
+    console.log('=== HTTP请求调试信息 ===');
+    console.log('请求方法:', config.method || 'get');
+    console.log('请求地址:', requestUrl);
+    console.log('请求头:', config.header);
+    console.log('请求数据:', config.data);
+    
     uni.request({
         method: config.method || 'get',
         timeout: config.timeout ||  timeout,
-        url: config.baseUrl || baseUrl + config.url,
+        url: requestUrl,
         data: config.data,
         header: config.header,
         dataType: 'json'
       }).then(response => {
+        console.log('=== HTTP响应调试信息 ===');
+        console.log('响应状态:', response.statusCode);
+        console.log('响应数据:', response.data);
        /* let [error, res] = response
         if (error) {
           toast('后端接口连接异常')

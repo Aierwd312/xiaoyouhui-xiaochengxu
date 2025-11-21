@@ -6393,7 +6393,7 @@ function populateParameters(fromRes, toRes) {
   let _SDKVersion = SDKVersion;
   const hostLanguage = (language || "").replace(/_/g, "-");
   const parameters = {
-    appId: "",
+    appId: "__UNI__8B8F533",
     appName: "校友会",
     appVersion: "1.0.0",
     appVersionCode: "100",
@@ -6542,7 +6542,7 @@ const getAppBaseInfo = {
       hostName: _hostName,
       hostSDKVersion: SDKVersion,
       hostTheme: theme,
-      appId: "",
+      appId: "__UNI__8B8F533",
       appName: "校友会",
       appVersion: "1.0.0",
       appVersionCode: "100",
@@ -7293,7 +7293,7 @@ function isConsoleWritable() {
 function initRuntimeSocketService() {
   const hosts = "172.18.0.1,192.168.6.249,169.254.176.224,169.254.16.176,127.0.0.1";
   const port = "8090";
-  const id = "mp-weixin_qxbkNb";
+  const id = "mp-weixin_3vD-GU";
   const lazy = typeof swan !== "undefined";
   let restoreError = lazy ? () => {
   } : initOnError();
@@ -9433,7 +9433,7 @@ function T(e2) {
 const b = true, E = "mp-weixin", A = T(define_process_env_UNI_SECURE_NETWORK_CONFIG_default), P = E, C = T(""), O = T("[]") || [];
 let N = "";
 try {
-  N = "";
+  N = "__UNI__8B8F533";
 } catch (e2) {
 }
 let L = {};

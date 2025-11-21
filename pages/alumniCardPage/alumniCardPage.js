@@ -1,5 +1,6 @@
 import { generateQRCode, getAlumniInfo } from '@/api/alumniCard'
 import { toast } from '@/utils/common'
+import store from '@/store'
 
 export default {
 	data() {
@@ -71,10 +72,11 @@ export default {
 				// 测试模式：使用模拟数据
 				if (this.testMode) {
 					console.log('测试模式：使用模拟用户信息');
+					// 从store获取昵称
+					const nickName = store.state.user.nickName || '校友';
 					const mockUserInfo = {
 						code: 200,
 						data: {
-							name: '张三',
 							enrollmentYear: '2020',
 							educationType: '本科',
 							faculty: '计算机学院',
@@ -90,7 +92,7 @@ export default {
 					
 					if (mockUserInfo.code === 200 && mockUserInfo.data) {
 						this.userInfo = {
-							name: mockUserInfo.data.name || '',
+							name: nickName,
 							enrollmentYear: mockUserInfo.data.enrollmentYear || '',
 							educationType: mockUserInfo.data.educationType || '',
 							faculty: mockUserInfo.data.faculty || '',
@@ -101,6 +103,9 @@ export default {
 					}
 				}
 				
+				// 从store获取昵称
+				const nickName = store.state.user.nickName || '校友';
+				
 				// 获取用户校友信息
 				const userInfoRes = await getAlumniInfo();
 				
@@ -108,7 +113,7 @@ export default {
 				
 				if (userInfoRes && userInfoRes.code === 200 && userInfoRes.data) {
 					this.userInfo = {
-						name: userInfoRes.data.name || '',
+						name: nickName,
 						enrollmentYear: userInfoRes.data.enrollmentYear || '',
 						educationType: userInfoRes.data.educationType || '',
 						faculty: userInfoRes.data.faculty || '',
@@ -119,7 +124,7 @@ export default {
 					console.warn('用户信息API返回异常，使用默认值');
 					// 如果获取用户信息失败，使用默认值
 					this.userInfo = {
-						name: '校友',
+						name: nickName,
 						enrollmentYear: '未知',
 						educationType: '未知',
 						faculty: '未知',
@@ -128,9 +133,11 @@ export default {
 				}
 			} catch (error) {
 				console.error('获取用户信息失败:', error);
+				// 从store获取昵称作为默认值
+				const nickName = store.state.user.nickName || '校友';
 				// 如果获取用户信息失败，使用默认值
 				this.userInfo = {
-					name: '校友',
+					name: nickName,
 					enrollmentYear: '未知',
 					educationType: '未知',
 					faculty: '未知',

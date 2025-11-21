@@ -19,7 +19,7 @@ const _sfc_main = {
     const version = config.config.appInfo.version;
     return (_ctx, _cache) => {
       return {
-        a: common_assets._imports_0$4,
+        a: common_assets._imports_0$5,
         b: common_vendor.p({
           type: "h2",
           title: "若依移动端"

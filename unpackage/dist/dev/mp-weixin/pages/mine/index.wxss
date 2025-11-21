@@ -14,65 +14,239 @@
 /* 透明度 */
 /* 文章场景相关 */
 page {
-  background-color: #f5f6f7;
+  background-color: #f5f7fa;
 }
 .mine-container {
-  width: 100%;
-  height: 100%;
+  min-height: 100vh;
+  background-color: #f5f7fa;
 }
-.mine-container .header-section {
-  padding: 15px 15px 45px 15px;
-  background-color: #3c96f3;
+
+/* 顶部背景渐变区域 */
+.header-bg {
+  background: linear-gradient(135deg, #004299 0%, #2A6DCF 100%);
+  padding: 40rpx 32rpx 120rpx 32rpx;
+  position: relative;
+}
+.header-content {
+  position: relative;
+  z-index: 2;
+}
+
+/* 用户信息卡片 */
+.user-card {
+  display: flex;
+  align-items: center;
+  padding: 40rpx 32rpx;
+  background: rgba(255, 255, 255, 0.15);
+  -webkit-backdrop-filter: blur(20rpx);
+          backdrop-filter: blur(20rpx);
+  border-radius: 24rpx;
+  border: 2rpx solid rgba(255, 255, 255, 0.2);
+}
+.avatar-wrapper {
+  flex-shrink: 0;
+  margin-right: 32rpx;
+}
+.user-avatar {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 70rpx;
+  border: 6rpx solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+}
+.avatar-placeholder {
+  width: 140rpx;
+  height: 140rpx;
+  border-radius: 70rpx;
+  background: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 6rpx solid rgba(255, 255, 255, 0.3);
+  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.15);
+}
+.avatar-placeholder .iconfont {
+  font-size: 70rpx;
+  color: #999999;
+}
+.user-info-wrapper {
+  flex: 1;
+  min-width: 0;
+}
+.login-prompt .login-text {
+  font-size: 36rpx;
+  font-weight: 500;
   color: white;
 }
-.mine-container .header-section .login-tip {
-  font-size: 18px;
-  margin-left: 10px;
-}
-.mine-container .header-section .cu-avatar {
-  border: 2px solid #eaeaea;
-}
-.mine-container .header-section .cu-avatar .icon {
-  font-size: 40px;
-}
-.mine-container .header-section .user-info {
-  margin-left: 15px;
-}
-.mine-container .header-section .user-info .u_title {
-  font-size: 18px;
-  line-height: 30px;
-}
-.mine-container .content-section {
-  position: relative;
-  top: -50px;
-}
-.mine-container .content-section .mine-actions {
-  margin: 15px 15px;
-  padding: 20px 0px;
-  border-radius: 8px;
-  background-color: white;
-}
-.mine-container .content-section .mine-actions .action-item .icon {
-  font-size: 28px;
-}
-.mine-container .content-section .mine-actions .action-item .text {
-  display: block;
-  font-size: 13px;
-  margin: 8px 0px;
-}
-.mine-container .content-section .item-box {
-  background-color: #FFFFFF;
-  margin: 0 15px;
+.user-details {
   display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  padding: 15px;
-  border-radius: 8px;
-  color: #303133;
-  font-size: 16px;
+  flex-direction: column;
+  gap: 16rpx;
 }
-.mine-container .content-section .item-box .text-red {
-  color: #e74c3c;
+.user-name {
+  font-size: 40rpx;
+  font-weight: 600;
+  color: white;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.info-btn {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+  padding: 12rpx 24rpx;
+  background: rgba(255, 255, 255, 0.2);
+  border-radius: 30rpx;
+  align-self: flex-start;
+}
+.info-btn .info-text {
+  font-size: 28rpx;
+  color: white;
+}
+.info-btn .iconfont {
+  font-size: 24rpx;
+  color: white;
+}
+
+/* 内容区域 */
+.content-wrapper {
+  margin-top: -80rpx;
+  padding: 0 32rpx 32rpx 32rpx;
+  position: relative;
+  z-index: 3;
+}
+
+/* 快捷操作卡片 */
+.action-card {
+  background: white;
+  border-radius: 24rpx;
+  padding: 48rpx 32rpx;
+  margin-bottom: 24rpx;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.06);
+}
+.action-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 32rpx;
+}
+.action-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16rpx;
+}
+.action-icon-wrapper {
+  width: 96rpx;
+  height: 96rpx;
+  border-radius: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+}
+.action-icon-wrapper .iconfont {
+  font-size: 48rpx;
+  color: white;
+}
+.action-item:active .action-icon-wrapper {
+  transform: scale(0.95);
+}
+.action-text {
+  font-size: 26rpx;
+  color: #666666;
+  text-align: center;
+}
+
+/* 渐变背景色 */
+.bg-gradient-pink {
+  background: linear-gradient(135deg, #ff6b9d 0%, #ff8fab 100%);
+}
+.bg-gradient-blue {
+  background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+}
+.bg-gradient-purple {
+  background: linear-gradient(135deg, #a18cd1 0%, #fbc2eb 100%);
+}
+.bg-gradient-green {
+  background: linear-gradient(135deg, #56ab2f 0%, #a8e063 100%);
+}
+.bg-gradient-orange {
+  background: linear-gradient(135deg, #ff8008 0%, #ffc837 100%);
+}
+.bg-gradient-red {
+  background: linear-gradient(135deg, #ff6a88 0%, #ff99ac 100%);
+}
+.bg-gradient-gray {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+/* 功能菜单卡片 */
+.menu-card {
+  background: white;
+  border-radius: 24rpx;
+  padding: 0;
+  margin-bottom: 24rpx;
+  overflow: hidden;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.06);
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 32rpx;
+  border-bottom: 2rpx solid #f5f5f5;
+  transition: background-color 0.3s ease;
+}
+.menu-item:active {
+  background-color: #f8f9fa;
+}
+.menu-item-last {
+  border-bottom: none;
+}
+.menu-left {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+.menu-icon-wrapper {
+  width: 80rpx;
+  height: 80rpx;
+  border-radius: 16rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.menu-icon-wrapper .iconfont {
+  font-size: 40rpx;
+  color: white;
+}
+.menu-title {
+  font-size: 32rpx;
+  color: #333333;
   font-weight: 500;
+}
+.menu-arrow {
+  font-size: 28rpx;
+  color: #cccccc;
+}
+
+/* 退出登录按钮 */
+.logout-card {
+  background: white;
+  border-radius: 24rpx;
+  padding: 32rpx;
+  text-align: center;
+  box-shadow: 0 4rpx 24rpx rgba(0, 0, 0, 0.06);
+  transition: all 0.3s ease;
+}
+.logout-card:active {
+  transform: scale(0.98);
+  background-color: #f8f9fa;
+}
+.logout-text {
+  font-size: 32rpx;
+  color: #e74c3c;
+  font-weight: 600;
 }

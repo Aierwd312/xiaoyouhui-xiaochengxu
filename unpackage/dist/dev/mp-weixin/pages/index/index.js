@@ -6,8 +6,8 @@ const common_assets = require("../../common/assets.js");
 const indexJs = {
   data() {
     return {
-      userName: store_index.store.state.user.name || "未登录",
-      // 用户名
+      nickName: store_index.store.getters.nickName || "未登录",
+      // 用户昵称
       isVerified: true,
       // 是否已认证
       notificationText: "最新福利通知：校友专享优惠活动开启",
@@ -166,9 +166,21 @@ const indexJs = {
     /**
      * 更新用户信息
      */
-    updateUserInfo() {
-      this.userName = store_index.store.state.user.name || "未登录";
-      common_vendor.index.__f__("log", "at pages/index/index.js:166", "更新用户名:", this.userName);
+    async updateUserInfo() {
+      try {
+        let nickName = store_index.store.getters.nickName;
+        if (!nickName) {
+          common_vendor.index.__f__("log", "at pages/index/index.js:170", "store中无用户信息，正在获取...");
+          await store_index.store.dispatch("GetInfo");
+          nickName = store_index.store.getters.nickName;
+        }
+        this.nickName = nickName || "未登录";
+        common_vendor.index.__f__("log", "at pages/index/index.js:176", "更新昵称:", this.nickName);
+        common_vendor.index.__f__("log", "at pages/index/index.js:177", "完整用户信息:", store_index.store.getters.userInfo);
+      } catch (error) {
+        common_vendor.index.__f__("error", "at pages/index/index.js:179", "获取用户信息失败:", error);
+        this.nickName = "获取失败";
+      }
     },
     /**
      * 点击通知栏
@@ -176,7 +188,7 @@ const indexJs = {
     handleNotificationClick() {
       const url = this.getPageUrl("notificationsPage");
       common_vendor.index.navigateTo({ url });
-      common_vendor.index.__f__("log", "at pages/index/index.js:175", `Navigating to: ${url}`);
+      common_vendor.index.__f__("log", "at pages/index/index.js:190", `Navigating to: ${url}`);
     },
     /**
      * 点击个人资料
@@ -184,7 +196,7 @@ const indexJs = {
     handleProfileClick() {
       const url = "/pages/mine/index";
       common_vendor.index.navigateTo({ url });
-      common_vendor.index.__f__("log", "at pages/index/index.js:185", `Navigating to: ${url}`);
+      common_vendor.index.__f__("log", "at pages/index/index.js:200", `Navigating to: ${url}`);
     },
     /**
      * 点击功能项
@@ -198,9 +210,9 @@ const indexJs = {
       if (clickedItem && clickedItem.url) {
         itemUrl = clickedItem.url;
         common_vendor.index.navigateTo({ url: itemUrl });
-        common_vendor.index.__f__("log", "at pages/index/index.js:202", `Navigating to function: ${name}, URL: ${itemUrl}`);
+        common_vendor.index.__f__("log", "at pages/index/index.js:217", `Navigating to function: ${name}, URL: ${itemUrl}`);
       } else {
-        common_vendor.index.__f__("warn", "at pages/index/index.js:204", `No URL found for function ID: ${id}, Name: ${name}`);
+        common_vendor.index.__f__("warn", "at pages/index/index.js:219", `No URL found for function ID: ${id}, Name: ${name}`);
         common_vendor.index.showToast({
           title: `功能"${name}"暂未开放`,
           icon: "none"
@@ -238,7 +250,7 @@ const indexJs = {
           const currentPage = pages[pages.length - 1];
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/index/index.js:272", "设置背景样式失败:", error);
+        common_vendor.index.__f__("error", "at pages/index/index.js:287", "设置背景样式失败:", error);
       }
     },
     /**
@@ -335,8 +347,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     e: common_assets._imports_3,
     f: common_vendor.o((...args) => _ctx.handleNotificationClick && _ctx.handleNotificationClick(...args)),
     g: $setup.navHeight + "px",
-    h: common_assets._imports_2,
-    i: common_vendor.t(_ctx.userName),
+    h: common_assets._imports_0$1,
+    i: common_vendor.t(_ctx.nickName),
     j: _ctx.isVerified
   }, _ctx.isVerified ? {} : {}, {
     k: common_assets._imports_3,

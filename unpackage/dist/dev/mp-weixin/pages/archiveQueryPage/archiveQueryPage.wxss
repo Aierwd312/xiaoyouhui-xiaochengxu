@@ -10,138 +10,99 @@
     padding: 24rpx 20rpx;
     box-sizing: border-box;
 }
-/* 通用区块容器 */
-.section-container {
-    background-color: #FFFFFF;
-    border-radius: 12rpx;
-    padding: 30rpx;
-    margin-bottom: 24rpx;
-    box-shadow: 0 2rpx 10rpx rgba(0, 0, 0, 0.05);
+/* 顶部操作栏 */
+.action-bar {
+    padding: 20rpx 0;
+    margin-bottom: 20rpx;
 }
-/* 区块标题 */
-.section-title {
+.add-button {
+    width: 100% !important;
+    height: 80rpx !important;
+    border-radius: 12rpx !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+.add-text {
+    margin-left: 10rpx;
+    font-size: 30rpx;
+}
+/* 申请列表区域 */
+.application-list {
+    margin-top: 20rpx;
+}
+/* 列表标题 */
+.list-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding-bottom: 20rpx;
-    border-bottom: 1rpx solid #EEEEEE;
-    margin-bottom: 24rpx;
+    padding: 20rpx 0;
 }
-.title-text {
-    font-size: 32rpx;
+.header-title {
+    font-size: 36rpx;
     font-weight: bold;
     color: #333333;
 }
-/* 档案类型网格 */
-.archive-types-grid {
-    padding: 16rpx 0;
-}
-.grid-item-box {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    padding: 20rpx;
-    transition: all 0.2s ease;
-}
-.grid-item-box.active {
-    background-color: rgba(0, 66, 153, 0.05);
-    border-radius: 8rpx;
-    transform: scale(1.05);
-}
-.grid-text {
-    font-size: 28rpx;
-    color: #333333;
-    margin-top: 12rpx;
-}
-/* 表单区域 */
-.form-section {
-    margin-top: 30rpx;
-}
-/* 修复表单项间距 */
-.fui-form-item {
-    margin-bottom: 12rpx;
-}
-/* 提交按钮区域 */
-.submit-button-container {
-    margin-top: 40rpx;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    padding-bottom: 16rpx;
-}
-/* 提交按钮样式 */
-.submit-button {
-    width: 90% !important;
-    height: 90rpx !important;
-    border-radius: 45rpx !important;
-    background-color: #004299 !important;
-    font-size: 32rpx !important;
-    font-weight: 500 !important;
-}
-.submit-tip {
-    font-size: 24rpx;
+.header-count {
+    font-size: 26rpx;
     color: #999999;
-    margin-top: 20rpx;
-    text-align: center;
-    line-height: 1.5;
-}
-/* 历史记录区域 */
-.history-section {
-    margin-top: 30rpx;
-}
-.history-records {
-    margin-top: 20rpx;
 }
 .empty-records {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 60rpx 0;
+    padding: 80rpx 0;
 }
 .empty-text {
     font-size: 28rpx;
     color: #999999;
     margin-top: 20rpx;
 }
-/* 记录卡片 */
-.record-card {
+.empty-hint {
+    font-size: 24rpx;
+    color: #CCCCCC;
+    margin-top: 12rpx;
+    text-align: center;
+}
+/* 申请卡片列表 */
+.application-cards {
+    margin-top: 20rpx;
+}
+/* 申请卡片 */
+.app-card {
     background-color: #FFFFFF;
-    border-radius: 8rpx;
+    border-radius: 12rpx;
     padding: 24rpx;
     margin-bottom: 20rpx;
-    border: 1rpx solid #EEEEEE;
+    box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
 }
-.record-header {
+/* 卡片头部 */
+.card-header {
+    margin-bottom: 16rpx;
+}
+.card-title-area {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 12rpx;
+    margin-bottom: 8rpx;
 }
-.record-type {
-    display: flex;
-    align-items: center;
-}
-.type-name {
-    font-size: 28rpx;
+.card-title {
+    font-size: 32rpx;
+    font-weight: bold;
     color: #333333;
-    margin-left: 12rpx;
-    font-weight: 500;
+    flex: 1;
 }
-.record-status {
+.card-status {
     padding: 6rpx 16rpx;
     border-radius: 20rpx;
     font-size: 24rpx;
+    margin-left: 12rpx;
 }
 /* 状态标签样式 */
 .status-pending {
     background-color: #FFF9E6;
     color: #FF9900;
-}
-.status-processing {
-    background-color: #E6F2FF;
-    color: #2A6DCF;
 }
 .status-completed {
     background-color: #E6FFF2;
@@ -151,63 +112,104 @@
     background-color: #FFF2F2;
     color: #FF5151;
 }
-.record-date {
+.card-time {
     font-size: 24rpx;
     color: #999999;
-    margin: 12rpx 0;
 }
-/* 记录详情 */
-.record-details {
-    margin-top: 20rpx;
-    padding-top: 20rpx;
-    border-top: 1rpx dashed #EEEEEE;
+/* 卡片内容 */
+.card-body {
+    margin: 16rpx 0;
 }
-.detail-item {
+.card-row {
     display: flex;
+    align-items: flex-start;
     margin-bottom: 12rpx;
+    line-height: 1.6;
 }
-.detail-label {
+.row-label {
     font-size: 26rpx;
     color: #666666;
     min-width: 140rpx;
+    flex-shrink: 0;
 }
-.detail-value {
+.row-value {
     font-size: 26rpx;
     color: #333333;
     flex: 1;
-    word-break: break-all; /* 允许在任意字符间断行 */
+    word-break: break-all;
 }
-/* 拒绝原因 */
-.reject-reason {
-    margin-top: 16rpx;
-    background-color: #FFF2F2;
-    padding: 16rpx;
-    border-radius: 8rpx;
-}
-.reason-label {
-    font-size: 26rpx;
+.error-label {
     color: #FF5151;
-    font-weight: 500;
 }
-.reason-content {
-    font-size: 26rpx;
-    color: #333333;
-    margin-top: 8rpx;
-    line-height: 1.5;
+.error-text {
+    color: #FF5151;
 }
-/* 记录操作按钮 */
-.record-actions {
+/* 卡片操作按钮 */
+.card-actions {
     display: flex;
     justify-content: flex-end;
+    gap: 16rpx;
     margin-top: 20rpx;
+    padding-top: 16rpx;
+    border-top: 1rpx solid #F5F5F5;
 }
-/* 下载结果按钮样式 */
-.download-button {
-    min-width: 180rpx !important;
-    height: 70rpx !important;
-    font-size: 28rpx !important;
-    border-radius: 35rpx !important;
-    padding: 0 30rpx !important;
+.mini-btn {
+    min-width: 120rpx !important;
+    height: 60rpx !important;
+    font-size: 26rpx !important;
+    border-radius: 30rpx !important;
+}
+/* 弹窗表单 */
+.form-popup {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background-color: #FFFFFF;
+    position: relative;
+    overflow: hidden;
+}
+.popup-title {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #333333;
+    padding: 30rpx 30rpx 20rpx;
+    border-bottom: 1rpx solid #F0F0F0;
+}
+.form-scroll {
+    flex: 1;
+    padding: 20rpx 30rpx;
+    min-height: 400rpx;
+    max-height: calc(75vh - 200rpx);
+}
+.popup-footer {
+    display: flex;
+    gap: 20rpx;
+    padding: 20rpx 30rpx;
+    border-top: 1rpx solid #F0F0F0;
+    background-color: #FFFFFF;
+}
+.footer-btn {
+    flex: 1;
+    height: 80rpx !important;
+    border-radius: 12rpx !important;
+    font-size: 30rpx !important;
+}
+/* 取消按钮样式 */
+.cancel-btn {
+    color: #333333 !important;
+    background-color: #E8E8E8 !important;
+    border: 1rpx solid #CCCCCC !important;
+}
+/* 增强取消按钮样式优先级 */
+.footer-btn.cancel-btn {
+    color: #333333 !important;
+    background-color: #E8E8E8 !important;
+    border: 1rpx solid #CCCCCC !important;
+}
+/* 确保按钮内部文字颜色 */
+.cancel-btn text,
+.cancel-btn .fui-button__text {
+    color: #333333 !important;
 }
 /* 选择器样式补充 */
 .fui-picker__indicator {
@@ -216,31 +218,8 @@
 .fui-picker__item {
     font-size: 28rpx;
 }
-/* 动画效果 */
-@keyframes fadeIn {
-from {
-        opacity: 0;
-}
-to {
-        opacity: 1;
-}
-}
-.form-section {
-    animation: fadeIn 0.3s ease-in-out;
-}
-.record-details {
-    animation: fadeIn 0.3s ease-in-out;
-}
 /* 安全区域适配 */
 .safe-area-bottom {
-    padding-bottom: constant(safe-area-inset-bottom); /* iOS 11.0 */
-    padding-bottom: env(safe-area-inset-bottom); /* iOS 11.2+ */
-}
-/* 确保对话框正确显示 */
-.fui-dialog__inner {
-    z-index: 1001 !important;
-}
-/* 确保加载提示正确显示 */
-.fui-loading__wrap {
-    z-index: 1002 !important;
+    padding-bottom: constant(safe-area-inset-bottom);
+    padding-bottom: env(safe-area-inset-bottom);
 }

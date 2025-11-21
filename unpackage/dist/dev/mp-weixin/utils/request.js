@@ -19,14 +19,23 @@ const request = (config2) => {
     config2.url = url;
   }
   return new Promise((resolve, reject) => {
+    const requestUrl = config2.baseUrl ? config2.baseUrl + config2.url : baseUrl + config2.url;
+    common_vendor.index.__f__("log", "at utils/request.js:27", "=== HTTP请求调试信息 ===");
+    common_vendor.index.__f__("log", "at utils/request.js:28", "请求方法:", config2.method || "get");
+    common_vendor.index.__f__("log", "at utils/request.js:29", "请求地址:", requestUrl);
+    common_vendor.index.__f__("log", "at utils/request.js:30", "请求头:", config2.header);
+    common_vendor.index.__f__("log", "at utils/request.js:31", "请求数据:", config2.data);
     common_vendor.index.request({
       method: config2.method || "get",
       timeout: config2.timeout || timeout,
-      url: config2.baseUrl || baseUrl + config2.url,
+      url: requestUrl,
       data: config2.data,
       header: config2.header,
       dataType: "json"
     }).then((response) => {
+      common_vendor.index.__f__("log", "at utils/request.js:41", "=== HTTP响应调试信息 ===");
+      common_vendor.index.__f__("log", "at utils/request.js:42", "响应状态:", response.statusCode);
+      common_vendor.index.__f__("log", "at utils/request.js:43", "响应数据:", response.data);
       const res = response;
       const code = res.data.code || 200;
       const msg = utils_errorCode.errorCode[code] || res.data.msg || utils_errorCode.errorCode["default"];
