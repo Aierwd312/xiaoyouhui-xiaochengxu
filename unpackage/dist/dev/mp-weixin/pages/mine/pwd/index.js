@@ -107,7 +107,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       label: "确认密码"
     }),
     j: common_vendor.o((...args) => $options.submit && $options.submit(...args)),
-    k: common_vendor.sr("form", "89d98b3a-0"),
+    k: common_vendor.sr("form", "600212ae-0"),
     l: common_vendor.p({
       value: $data.user,
       labelWidth: "80px"

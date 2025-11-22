@@ -38,7 +38,7 @@ export default {
 			
 			// 接收方式映射
 			sendTypeMap: {
-				'电子档': 'electronic',
+				'电子档': 'email',
 				'纸质档(邮寄)': 'paper',
 				'两者都需要': 'both'
 			},
@@ -281,31 +281,31 @@ export default {
 				this.isSubmitting = true;
 				
 				// 获取当前用户信息
-				const userInfo = store.getters.userInfo || {};
-				const userId = userInfo.userId || userInfo.id;
-				const userName = userInfo.userName || userInfo.nickName || '';
+				// const userInfo = store.getters.userInfo || {};
+				// const userId = userInfo.userId || userInfo.id;
+				// const userName = userInfo.userName || userInfo.nickName || '';
 				
-				// 检查用户信息
-				if (!userId) {
-					console.error('用户信息缺失，无法提交申请');
-					uni.showModal({
-						title: '提示',
-						content: '用户信息缺失，请重新登录后再试',
-						showCancel: false,
-						success: () => {
-							uni.reLaunch({ url: '/pages/login/login' });
-						}
-					});
-					return;
-				}
+				// // 检查用户信息
+				// if (!userId) {
+				// 	console.error('用户信息缺失，无法提交申请');
+				// 	uni.showModal({
+				// 		title: '提示',
+				// 		content: '用户信息缺失，请重新登录后再试',
+				// 		showCancel: false,
+				// 		success: () => {
+				// 			uni.reLaunch({ url: '/pages/login/login' });
+				// 		}
+				// 	});
+				// 	return;
+				// }
 				
 				// 构建提交数据 - 完全匹配API示例结构
 				const submitData = {
 					title: this.formData.title,
-					applicant: userId,
-					applicantUserName: userName,
-					applicantNickName: userInfo.nickName || '',
-					deptId: userInfo.deptId || 1, // 默认为1
+					// applicant: userId,
+					// applicantUserName: userName,
+					// applicantNickName: userInfo.nickName || '',
+					// deptId: userInfo.deptId || 1, // 默认为1
 					applicationFile: this.formData.applicationFile,
 					applicationReason: this.formData.applicationReason,
 					applicationAnnexes: this.formData.applicationAnnexes || '', // 申请附件
@@ -313,12 +313,12 @@ export default {
 					email: this.formData.email || userInfo.email || '',
 					address: this.formData.address || '',
 					phone: this.formData.phone,
-					status: '0', // 0-待审核
+					// status: '0', // 0-待审核
 					reviewer: null, // 审核人，新增时为空
 					reviewerName: '', // 审核人姓名
 					reviewComments: '', // 审核意见
-					createBy: userName, // 创建者
-					updateBy: userName, // 更新者
+					// createBy: userName, // 创建者
+					// updateBy: userName, // 更新者
 					remark: this.formData.remark || '',
 					params: {
 						// 扩展参数，可用于存储额外信息
@@ -326,11 +326,11 @@ export default {
 				};
 				
 				// 打印调试信息
-				console.log('=== 档案申请提交调试信息 ===');
-				console.log('用户信息:', userInfo);
-				console.log('表单数据:', this.formData);
-				console.log('提交数据:', submitData);
-				console.log('API模式:', this.formMode === 'edit' ? '编辑' : '新增');
+				// console.log('=== 档案申请提交调试信息 ===');
+				// console.log('用户信息:', userInfo);
+				// console.log('表单数据:', this.formData);
+				// console.log('提交数据:', submitData);
+				// console.log('API模式:', this.formMode === 'edit' ? '编辑' : '新增');
 				
 				// 根据是否为编辑模式调用不同API
 				if (this.formMode === 'edit' && this.currentEditId) {
@@ -400,7 +400,7 @@ export default {
 			}
 			
 			// 验证电子邮箱（电子档或两者都需要时必填）
-			if ((this.formData.sendType === 'electronic' || this.formData.sendType === 'both') && !this.formData.email) {
+			if ((this.formData.sendType === 'email' || this.formData.sendType === 'both') && !this.formData.email) {
 				uni.showToast({
 					title: '请输入电子邮箱',
 					icon: 'none'
