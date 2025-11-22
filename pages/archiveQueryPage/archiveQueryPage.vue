@@ -182,7 +182,7 @@
 							</fui-input>
 						</fui-form-item>
 						
-						<fui-form-item v-if="formData.sendType === 'electronic' || formData.sendType === 'both'" label="电子邮箱" required asterisk>
+						<fui-form-item v-if="formData.sendType === 'email' || formData.sendType === 'both'" label="电子邮箱" required asterisk>
 							<fui-input 
 								v-model="formData.email" 
 								placeholder="请输入电子邮箱"

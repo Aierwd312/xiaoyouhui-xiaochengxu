@@ -38,7 +38,7 @@ const archiveQueryPageJs = {
       sendTypeOptions: ["电子档", "纸质档(邮寄)", "两者都需要"],
       // 接收方式映射
       sendTypeMap: {
-        "电子档": "electronic",
+        "电子档": "email",
         "纸质档(邮寄)": "paper",
         "两者都需要": "both"
       },
@@ -82,10 +82,10 @@ const archiveQueryPageJs = {
     async loadApplications() {
       try {
         this.isLoading = true;
-        const userInfo = store_index.store.getters.userInfo || {};
-        const userId = userInfo.userId || userInfo.id;
+        const userInfo2 = store_index.store.getters.userInfo || {};
+        const userId = userInfo2.userId || userInfo2.id;
         common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:89", "=== 加载档案申请列表 ===");
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:90", "用户信息:", userInfo);
+        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:90", "用户信息:", userInfo2);
         common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:91", "用户ID:", userId);
         const queryParams = {
           applicant: userId
@@ -137,9 +137,9 @@ const archiveQueryPageJs = {
       this.formMode = "add";
       this.currentEditId = null;
       this.resetFormData();
-      const userInfo = store_index.store.getters.userInfo || {};
-      this.formData.phone = userInfo.phonenumber || userInfo.phone || "";
-      this.formData.email = userInfo.email || "";
+      const userInfo2 = store_index.store.getters.userInfo || {};
+      this.formData.phone = userInfo2.phonenumber || userInfo2.phone || "";
+      this.formData.email = userInfo2.email || "";
       this.showFormPopup = true;
     },
     /**
@@ -251,28 +251,12 @@ const archiveQueryPageJs = {
       }
       try {
         this.isSubmitting = true;
-        const userInfo = store_index.store.getters.userInfo || {};
-        const userId = userInfo.userId || userInfo.id;
-        const userName = userInfo.userName || userInfo.nickName || "";
-        if (!userId) {
-          common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:290", "用户信息缺失，无法提交申请");
-          common_vendor.index.showModal({
-            title: "提示",
-            content: "用户信息缺失，请重新登录后再试",
-            showCancel: false,
-            success: () => {
-              common_vendor.index.reLaunch({ url: "/pages/login/login" });
-            }
-          });
-          return;
-        }
         const submitData = {
           title: this.formData.title,
-          applicant: userId,
-          applicantUserName: userName,
-          applicantNickName: userInfo.nickName || "",
-          deptId: userInfo.deptId || 1,
-          // 默认为1
+          // applicant: userId,
+          // applicantUserName: userName,
+          // applicantNickName: userInfo.nickName || '',
+          // deptId: userInfo.deptId || 1, // 默认为1
           applicationFile: this.formData.applicationFile,
           applicationReason: this.formData.applicationReason,
           applicationAnnexes: this.formData.applicationAnnexes || "",
@@ -281,28 +265,20 @@ const archiveQueryPageJs = {
           email: this.formData.email || userInfo.email || "",
           address: this.formData.address || "",
           phone: this.formData.phone,
-          status: "0",
-          // 0-待审核
+          // status: '0', // 0-待审核
           reviewer: null,
           // 审核人，新增时为空
           reviewerName: "",
           // 审核人姓名
           reviewComments: "",
           // 审核意见
-          createBy: userName,
-          // 创建者
-          updateBy: userName,
-          // 更新者
+          // createBy: userName, // 创建者
+          // updateBy: userName, // 更新者
           remark: this.formData.remark || "",
           params: {
             // 扩展参数，可用于存储额外信息
           }
         };
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:329", "=== 档案申请提交调试信息 ===");
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:330", "用户信息:", userInfo);
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:331", "表单数据:", this.formData);
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:332", "提交数据:", submitData);
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:333", "API模式:", this.formMode === "edit" ? "编辑" : "新增");
         if (this.formMode === "edit" && this.currentEditId) {
           submitData.id = this.currentEditId;
           common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:338", "调用编辑API:", submitData);
@@ -364,7 +340,7 @@ const archiveQueryPageJs = {
         });
         return false;
       }
-      if ((this.formData.sendType === "electronic" || this.formData.sendType === "both") && !this.formData.email) {
+      if ((this.formData.sendType === "email" || this.formData.sendType === "both") && !this.formData.email) {
         common_vendor.index.showToast({
           title: "请输入电子邮箱",
           icon: "none"
@@ -609,19 +585,19 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         k: app.status === "pending"
       }, app.status === "pending" ? {
         l: common_vendor.o(($event) => _ctx.editApplication(app), app.id),
-        m: "0987a980-6-" + i0,
+        m: "c9b8c156-6-" + i0,
         n: common_vendor.p({
           size: "small",
           background: "#FF9800"
         }),
         o: common_vendor.o(($event) => _ctx.withdrawApplication(app.id), app.id),
-        p: "0987a980-7-" + i0,
+        p: "c9b8c156-7-" + i0,
         q: common_vendor.p({
           size: "small",
           background: "#2A6DCF"
         }),
         r: common_vendor.o(($event) => _ctx.deleteApplication(app.id), app.id),
-        s: "0987a980-8-" + i0,
+        s: "c9b8c156-8-" + i0,
         t: common_vendor.p({
           size: "small",
           background: "#FF5151"
@@ -630,7 +606,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         v: app.status === "completed"
       }, app.status === "completed" ? {
         w: common_vendor.o(($event) => _ctx.downloadResult(app.id), app.id),
-        x: "0987a980-9-" + i0,
+        x: "c9b8c156-9-" + i0,
         y: common_vendor.p({
           size: "small",
           background: _ctx.primaryColor
@@ -639,7 +615,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         z: app.status === "rejected"
       }, app.status === "rejected" ? {
         A: common_vendor.o(($event) => _ctx.deleteApplication(app.id), app.id),
-        B: "0987a980-10-" + i0,
+        B: "c9b8c156-10-" + i0,
         C: common_vendor.p({
           size: "small",
           background: "#FF5151"
@@ -696,8 +672,8 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       required: true,
       asterisk: true
     }),
-    D: _ctx.formData.sendType === "electronic" || _ctx.formData.sendType === "both"
-  }, _ctx.formData.sendType === "electronic" || _ctx.formData.sendType === "both" ? {
+    D: _ctx.formData.sendType === "email" || _ctx.formData.sendType === "both"
+  }, _ctx.formData.sendType === "email" || _ctx.formData.sendType === "both" ? {
     E: common_vendor.o(($event) => _ctx.formData.email = $event),
     F: common_vendor.p({
       placeholder: "请输入电子邮箱",
