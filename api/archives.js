@@ -50,13 +50,13 @@ export function getArchiveApplicationDetail(id) {
 export function addArchiveApplication(data) {
   console.log('=== 新增档案申请API调用 ===');
   console.log('基础地址:', ARCHIVES_BASE_URL);
-  console.log('接口路径:', '/core/archivesApplications');
-  console.log('完整地址:', `${ARCHIVES_BASE_URL}/core/archivesApplications`);
+  console.log('接口路径:', '/core/archivesApplications/');
+  console.log('完整地址:', `${ARCHIVES_BASE_URL}/core/archivesApplications/`);
   console.log('请求数据:', data);
   
   const result = request({
     baseUrl: ARCHIVES_BASE_URL,
-    url: '/core/archivesApplications',
+    url: '/core/archivesApplications/',
     method: 'post',
     data: data
   });

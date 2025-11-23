@@ -9,6 +9,7 @@ const baseUrl = config.baseUrl
 const user = {
   state: {
     token: getToken(),
+    userId: storage.get(constant.userId),
     name: storage.get(constant.name),
     nickName: storage.get(constant.nickName),
     avatar: storage.get(constant.avatar),
@@ -19,6 +20,10 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token
+    },
+    SET_USERID: (state, userId) => {
+      state.userId = userId
+      storage.set(constant.userId, userId)
     },
     SET_NAME: (state, name) => {
       state.name = name
@@ -72,12 +77,14 @@ const user = {
 		  const avatar = (user == null || user.avatar == "" || user.avatar == null) ? "/static/images/profile.jpg" : user.avatar
 		  const username = (user == null || user.userName == "" || user.userName == null) ? "" : user.userName
 		  const nickName = (user == null || user.nickName == "" || user.nickName == null) ? "" : user.nickName
+		  const userId = (user == null || user.userId == "" || user.userId == null) ? "" : user.userId
           if (res.roles && res.roles.length > 0) {
             commit('SET_ROLES', res.roles)
             commit('SET_PERMISSIONS', res.permissions)
           } else {
             commit('SET_ROLES', ['ROLE_DEFAULT'])
           }
+          commit('SET_USERID', userId)
           commit('SET_NAME', username)
           commit('SET_NICKNAME', nickName)
           commit('SET_AVATAR', avatar)
@@ -93,6 +100,7 @@ const user = {
       return new Promise((resolve, reject) => {
         logout(state.token).then(() => {
           commit('SET_TOKEN', '')
+          commit('SET_USERID', '')
           commit('SET_ROLES', [])
           commit('SET_PERMISSIONS', [])
           removeToken()

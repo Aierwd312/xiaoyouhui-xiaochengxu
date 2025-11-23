@@ -8,14 +8,24 @@
 			fontWeight="bold"
 			:splitLine="true"
 			:isFixed="true"
-			:isOccupy="true"
+			:isOccupy="false"
 			@init="navbarInit"
 			@leftClick="goBack">
 			<fui-icon name="arrowleft" :color="navTitleColor" :size="36"></fui-icon>
 		</fui-nav-bar>
-		
 		<!-- 内容区域 -->
 		<view class="content-container" :style="{ paddingTop: navHeight + 'px' }">
+			<!-- 顶部装饰区域 -->
+			<view class="header-decoration">
+				<view class="decoration-content">
+					<image src="/static/archive-line.svg" class="decoration-icon" mode="aspectFit"></image>
+					<view class="decoration-text">
+						<text class="decoration-title">档案材料申请</text>
+						<text class="decoration-subtitle">快速申请您需要的档案材料</text>
+					</view>
+				</view>
+				<image src="/static/school-badge.svg" class="school-badge" mode="aspectFit"></image>
+			</view>
 			
 			<!-- 顶部操作区 -->
 			<view class="action-bar">
@@ -77,9 +87,13 @@
 								<text class="row-label">邮寄地址：</text>
 								<text class="row-value">{{app.address}}</text>
 							</view>
+							<view class="card-row" v-if="app.reviewerName">
+								<text class="row-label">审核人：</text>
+								<text class="row-value">{{app.reviewerName}}</text>
+							</view>
 							<view class="card-row" v-if="app.reviewComments">
-								<text class="row-label error-label">审核意见：</text>
-								<text class="row-value error-text">{{app.reviewComments}}</text>
+								<text class="row-label" :class="{'error-label': app.status === 'rejected'}">审核意见：</text>
+								<text class="row-value" :class="{'error-text': app.status === 'rejected'}">{{app.reviewComments}}</text>
 							</view>
 						</view>
 						
@@ -87,49 +101,39 @@
 						<view class="card-actions">
 							<!-- 待审核状态：编辑、撤回、删除 -->
 							<template v-if="app.status === 'pending'">
-								<fui-button 
-									size="small" 
-									background="#FF9800"
-									class="mini-btn" 
+								<view 
+									class="mini-btn edit-btn" 
 									@click="editApplication(app)">
 									编辑
-								</fui-button>
-								<fui-button 
-									size="small" 
-									background="#2A6DCF"
-									class="mini-btn" 
+								</view>
+								<view 
+									class="mini-btn withdraw-btn" 
 									@click="withdrawApplication(app.id)">
 									撤回
-								</fui-button>
-								<fui-button 
-									size="small" 
-									background="#FF5151"
-									class="mini-btn" 
+								</view>
+								<view 
+									class="mini-btn delete-btn" 
 									@click="deleteApplication(app.id)">
 									删除
-								</fui-button>
+								</view>
 							</template>
 							
 							<!-- 已完成状态：下载 -->
 							<template v-if="app.status === 'completed'">
-								<fui-button 
-									size="small" 
-									:background="primaryColor"
-									class="mini-btn" 
+								<view 
+									class="mini-btn download-btn" 
 									@click="downloadResult(app.id)">
 									下载结果
-								</fui-button>
+								</view>
 							</template>
 							
 							<!-- 已拒绝状态：删除 -->
 							<template v-if="app.status === 'rejected'">
-								<fui-button 
-									size="small" 
-									background="#FF5151"
-									class="mini-btn" 
+								<view 
+									class="mini-btn delete-btn" 
 									@click="deleteApplication(app.id)">
 									删除
-								</fui-button>
+								</view>
 							</template>
 						</view>
 					</view>
@@ -139,7 +143,6 @@
 			<!-- 安全区域 -->
 			<view class="safe-area-bottom"></view>
 		</view>
-		
 		<!-- 申请表单弹窗 -->
 		<fui-bottom-popup 
 			:show="showFormPopup" 
@@ -182,7 +185,7 @@
 							</fui-input>
 						</fui-form-item>
 						
-						<fui-form-item v-if="formData.sendType === 'email' || formData.sendType === 'both'" label="电子邮箱" required asterisk>
+						<fui-form-item v-if="formData.sendType === '0' || formData.sendType === '2'" label="电子邮箱" required asterisk>
 							<fui-input 
 								v-model="formData.email" 
 								placeholder="请输入电子邮箱"
@@ -190,7 +193,7 @@
 							</fui-input>
 						</fui-form-item>
 						
-						<fui-form-item v-if="formData.sendType === 'paper' || formData.sendType === 'both'" label="邮寄地址">
+						<fui-form-item v-if="formData.sendType === '1' || formData.sendType === '2'" label="邮寄地址">
 							<fui-textarea 
 								v-model="formData.address" 
 								placeholder="请输入邮寄地址" 

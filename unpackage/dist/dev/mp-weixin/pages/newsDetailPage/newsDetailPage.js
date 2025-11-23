@@ -242,7 +242,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, $data.newsDetail.url.includes("mp.weixin.qq.com") ? {} : {}, {
     s: common_vendor.o(($event) => $options.openUrl($data.newsDetail.url))
   }) : {}, {
-    t: common_assets._imports_1$1,
+    t: common_assets._imports_1$2,
     v: common_vendor.o((...args) => $options.handleShare && $options.handleShare(...args)),
     w: common_assets._imports_2$2,
     x: common_vendor.o((...args) => $options.handleBack && $options.handleBack(...args))

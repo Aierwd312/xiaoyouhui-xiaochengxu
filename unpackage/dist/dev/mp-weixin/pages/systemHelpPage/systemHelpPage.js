@@ -131,7 +131,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       fontWeight: 500
     }),
     e: common_assets._imports_0$6,
-    f: common_assets._imports_1$2,
+    f: common_assets._imports_1$3,
     g: common_vendor.f($data.functionGuides, (item, index, i0) => {
       return common_vendor.e({
         a: "/static/" + item.icon + ".svg",

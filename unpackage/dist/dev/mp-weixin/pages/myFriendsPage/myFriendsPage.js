@@ -674,7 +674,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
   }, !$data.isSearchMode ? {
     t: common_vendor.f($data.categories, (category, index, i0) => {
       return common_vendor.e({
-        a: "efcef5b2-5-" + i0,
+        a: "27a368dc-5-" + i0,
         b: common_vendor.p({
           name: category.icon,
           color: category.color,
@@ -682,7 +682,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
         }),
         c: common_vendor.t(category.name),
         d: common_vendor.t(category.count),
-        e: "efcef5b2-6-" + i0,
+        e: "27a368dc-6-" + i0,
         f: $data.expandedCategory === category.code ? 1 : "",
         g: $data.expandedCategory === category.code ? 1 : "",
         h: common_vendor.o(($event) => $options.toggleCategory(category), index),
@@ -704,7 +704,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
           }, friend.major ? {
             h: common_vendor.t(friend.major)
           } : {}, {
-            i: "efcef5b2-7-" + i0 + "-" + i1,
+            i: "27a368dc-7-" + i0 + "-" + i1,
             j: common_vendor.o(($event) => $options.showContactInfo(friend), friend.id),
             k: friend.id,
             l: common_vendor.o(($event) => $options.viewFriendDetail(friend), friend.id),
@@ -743,7 +743,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       }, friend.major ? {
         h: common_vendor.t(friend.major)
       } : {}, {
-        i: "efcef5b2-8-" + i0,
+        i: "27a368dc-8-" + i0,
         j: common_vendor.o(($event) => $options.showContactInfo(friend), friend.id),
         k: friend.id,
         l: common_vendor.o(($event) => $options.viewFriendDetail(friend), friend.id),

@@ -25,12 +25,12 @@ function getArchiveApplicationList(query) {
 function addArchiveApplication(data) {
   common_vendor.index.__f__("log", "at api/archives.js:51", "=== 新增档案申请API调用 ===");
   common_vendor.index.__f__("log", "at api/archives.js:52", "基础地址:", ARCHIVES_BASE_URL);
-  common_vendor.index.__f__("log", "at api/archives.js:53", "接口路径:", "/core/archivesApplications");
-  common_vendor.index.__f__("log", "at api/archives.js:54", "完整地址:", `${ARCHIVES_BASE_URL}/core/archivesApplications`);
+  common_vendor.index.__f__("log", "at api/archives.js:53", "接口路径:", "/core/archivesApplications/");
+  common_vendor.index.__f__("log", "at api/archives.js:54", "完整地址:", `${ARCHIVES_BASE_URL}/core/archivesApplications/`);
   common_vendor.index.__f__("log", "at api/archives.js:55", "请求数据:", data);
   const result = utils_request.request({
     baseUrl: ARCHIVES_BASE_URL,
-    url: "/core/archivesApplications",
+    url: "/core/archivesApplications/",
     method: "post",
     data
   });

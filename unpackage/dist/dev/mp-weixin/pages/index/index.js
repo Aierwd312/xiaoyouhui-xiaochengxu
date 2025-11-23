@@ -347,7 +347,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
     e: common_assets._imports_3,
     f: common_vendor.o((...args) => _ctx.handleNotificationClick && _ctx.handleNotificationClick(...args)),
     g: $setup.navHeight + "px",
-    h: common_assets._imports_0$1,
+    h: common_assets._imports_1,
     i: common_vendor.t(_ctx.nickName),
     j: _ctx.isVerified
   }, _ctx.isVerified ? {} : {}, {

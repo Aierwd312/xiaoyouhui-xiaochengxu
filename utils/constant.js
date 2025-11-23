@@ -1,4 +1,5 @@
 const constant = {
+   userId: 'vuex_userId',
    avatar: 'vuex_avatar',
    name: 'vuex_name',
    nickName: 'vuex_nickName',

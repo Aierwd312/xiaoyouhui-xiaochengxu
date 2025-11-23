@@ -8,14 +8,71 @@
 
 /* 内容区域 */
 .content-container {
-    padding: 24rpx 20rpx;
+    padding-right: 20rpx;
+    padding-bottom: 28rpx;
+    padding-left: 20rpx;
     box-sizing: border-box;
+}
+
+/* 顶部装饰区域 */
+.header-decoration {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 40rpx 20rpx;
+    margin: 24rpx 0;
+    background: linear-gradient(135deg, rgba(0, 66, 153, 0.05), rgba(42, 109, 207, 0.05));
+    border-radius: 16rpx;
+    position: relative;
+    overflow: hidden;
+    min-height: 140rpx;
+}
+
+.decoration-content {
+    display: flex;
+    align-items: center;
+    flex: 1;
+}
+
+.decoration-icon {
+    width: 80rpx;
+    height: 80rpx;
+    margin-right: 24rpx;
+    filter: invert(21%) sepia(100%) saturate(2000%) hue-rotate(210deg) brightness(90%) contrast(120%);
+}
+
+.decoration-text {
+    display: flex;
+    flex-direction: column;
+}
+
+.decoration-title {
+    font-size: 36rpx;
+    font-weight: bold;
+    color: #004299;
+    margin-bottom: 8rpx;
+}
+
+.decoration-subtitle {
+    font-size: 26rpx;
+    color: #666666;
+    line-height: 1.4;
+}
+
+.school-badge {
+    width: 120rpx;
+    height: 120rpx;
+    opacity: 0.1;
+    position: absolute;
+    right: 20rpx;
+    top: 50%;
+    transform: translateY(-50%);
 }
 
 /* 顶部操作栏 */
 .action-bar {
-    padding: 20rpx 0;
-    margin-bottom: 20rpx;
+    padding: 0;
+    margin-bottom: 60rpx;
 }
 
 .add-button {
@@ -34,7 +91,7 @@
 
 /* 申请列表区域 */
 .application-list {
-    margin-top: 20rpx;
+    margin-top: 30rpx;
 }
 
 /* 列表标题 */
@@ -89,6 +146,8 @@
     padding: 24rpx;
     margin-bottom: 20rpx;
     box-shadow: 0 2rpx 12rpx rgba(0, 0, 0, 0.06);
+    position: relative;
+    overflow: hidden;
 }
 
 /* 卡片头部 */
@@ -133,6 +192,11 @@
     color: #FF5151;
 }
 
+.status-sent {
+    background-color: #E6F7FF;
+    color: #1890FF;
+}
+
 .card-time {
     font-size: 24rpx;
     color: #999999;
@@ -140,7 +204,7 @@
 
 /* 卡片内容 */
 .card-body {
-    margin: 16rpx 0;
+    margin: 16rpx 0 8rpx 0;
 }
 
 .card-row {
@@ -176,17 +240,60 @@
 .card-actions {
     display: flex;
     justify-content: flex-end;
-    gap: 16rpx;
-    margin-top: 20rpx;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 8rpx;
+    margin-top: 16rpx;
     padding-top: 16rpx;
-    border-top: 1rpx solid #F5F5F5;
+    border-top: 1rpx solid #F0F0F0;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .mini-btn {
-    min-width: 120rpx !important;
-    height: 60rpx !important;
-    font-size: 26rpx !important;
-    border-radius: 30rpx !important;
+    min-width: 100rpx;
+    width: auto;
+    max-width: 160rpx;
+    height: 56rpx;
+    font-size: 26rpx;
+    border-radius: 28rpx;
+    padding: 0 24rpx;
+    flex-shrink: 0;
+    border: none;
+    box-shadow: 0 2rpx 8rpx rgba(0, 0, 0, 0.1);
+    font-weight: 500;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    user-select: none;
+}
+
+.mini-btn:active {
+    transform: scale(0.95);
+    opacity: 0.8;
+}
+
+/* 按钮特定样式 */
+.edit-btn {
+    background: #4CAF50;
+}
+
+.withdraw-btn {
+    background: #004299;
+}
+
+.delete-btn {
+    background: #FF6B6B;
+}
+
+.download-btn {
+    background: #004299;
 }
 
 /* 弹窗表单 */

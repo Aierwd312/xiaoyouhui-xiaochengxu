@@ -376,7 +376,7 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       isFixed: true,
       fontWeight: 500
     }),
-    f: common_assets._imports_0$2,
+    f: common_assets._imports_0$1,
     g: common_vendor.p({
       span: 8
     }),

@@ -8,6 +8,7 @@ config.config.baseUrl;
 const user = {
   state: {
     token: utils_auth.getToken(),
+    userId: utils_storage.storage.get(utils_constant.constant.userId),
     name: utils_storage.storage.get(utils_constant.constant.name),
     nickName: utils_storage.storage.get(utils_constant.constant.nickName),
     avatar: utils_storage.storage.get(utils_constant.constant.avatar),
@@ -17,6 +18,10 @@ const user = {
   mutations: {
     SET_TOKEN: (state, token) => {
       state.token = token;
+    },
+    SET_USERID: (state, userId) => {
+      state.userId = userId;
+      utils_storage.storage.set(utils_constant.constant.userId, userId);
     },
     SET_NAME: (state, name) => {
       state.name = name;
@@ -64,12 +69,14 @@ const user = {
           const avatar = user2 == null || user2.avatar == "" || user2.avatar == null ? "/static/images/profile.jpg" : user2.avatar;
           const username = user2 == null || user2.userName == "" || user2.userName == null ? "" : user2.userName;
           const nickName = user2 == null || user2.nickName == "" || user2.nickName == null ? "" : user2.nickName;
+          const userId = user2 == null || user2.userId == "" || user2.userId == null ? "" : user2.userId;
           if (res.roles && res.roles.length > 0) {
             commit("SET_ROLES", res.roles);
             commit("SET_PERMISSIONS", res.permissions);
           } else {
             commit("SET_ROLES", ["ROLE_DEFAULT"]);
           }
+          commit("SET_USERID", userId);
           commit("SET_NAME", username);
           commit("SET_NICKNAME", nickName);
           commit("SET_AVATAR", avatar);
@@ -84,6 +91,7 @@ const user = {
       return new Promise((resolve, reject) => {
         api_login.logout(state.token).then(() => {
           commit("SET_TOKEN", "");
+          commit("SET_USERID", "");
           commit("SET_ROLES", []);
           commit("SET_PERMISSIONS", []);
           utils_auth.removeToken();

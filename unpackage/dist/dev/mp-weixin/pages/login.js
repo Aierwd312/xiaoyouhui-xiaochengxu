@@ -85,7 +85,7 @@ const _sfc_main = {
     getCode();
     return (_ctx, _cache) => {
       return common_vendor.e({
-        a: common_assets._imports_0$1,
+        a: common_assets._imports_1,
         b: loginForm.value.username,
         c: common_vendor.o(($event) => loginForm.value.username = $event.detail.value),
         d: loginForm.value.password,

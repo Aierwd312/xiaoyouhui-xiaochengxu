@@ -2,63 +2,47 @@
 const common_vendor = require("../../common/vendor.js");
 const api_archives = require("../../api/archives.js");
 const store_index = require("../../store/index.js");
+const common_assets = require("../../common/assets.js");
 const archiveQueryPageJs = {
   data() {
     return {
-      // 导航栏配置
       navBackground: "#004299",
       navTitleColor: "#FFFFFF",
       primaryColor: "#004299",
-      // 申请列表数据
       applications: [],
-      // 表单数据
       formData: {
         title: "",
-        // 申请标题
         applicationFile: "",
-        // 申请材料
         applicationReason: "",
-        // 申请原因
         applicationAnnexes: "",
-        // 申请附件
         sendType: "",
-        // 接收方式值
         sendTypeText: "",
-        // 接收方式显示文本
         email: "",
-        // 电子邮箱
         address: "",
-        // 邮寄地址
         phone: "",
-        // 联系电话
         remark: ""
-        // 备注
       },
-      // 接收方式选项（字符串数组）
       sendTypeOptions: ["电子档", "纸质档(邮寄)", "两者都需要"],
-      // 接收方式映射
       sendTypeMap: {
-        "电子档": "email",
-        "纸质档(邮寄)": "paper",
-        "两者都需要": "both"
+        "电子档": "0",
+        "纸质档(邮寄)": "1",
+        "两者都需要": "2"
       },
-      // 选择器配置
+      sendTypeReverseMap: {
+        "0": "email",
+        "1": "paper",
+        "2": "both"
+      },
       pickerConfig: {
         show: false,
         options: [],
         currentField: ""
       },
-      // 状态控制
       isLoading: false,
-      // 列表加载状态
       isSubmitting: false,
-      // 提交加载状态
       showFormPopup: false,
-      // 是否显示表单弹窗
       formMode: "add",
-      // 表单模式：add-新增, edit-编辑
       currentEditId: null
-      // 当前编辑的申请ID
     };
   },
   onLoad() {
@@ -68,59 +52,50 @@ const archiveQueryPageJs = {
     this.loadApplications();
   },
   methods: {
-    /**
-     * 返回上一页
-     */
     goBack() {
       common_vendor.index.navigateBack({
         delta: 1
       });
     },
-    /**
-     * 加载申请列表
-     */
     async loadApplications() {
       try {
         this.isLoading = true;
-        const userInfo2 = store_index.store.getters.userInfo || {};
-        const userId = userInfo2.userId || userInfo2.id;
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:89", "=== 加载档案申请列表 ===");
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:90", "用户信息:", userInfo2);
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:91", "用户ID:", userId);
-        const queryParams = {
-          applicant: userId
-          // 可以添加其他查询条件
-          // status: '', // 申请状态筛选
-          // title: '', // 标题筛选
-          // applicationFile: '', // 申请材料筛选
-        };
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:102", "查询参数:", queryParams);
+        const userInfo = store_index.store.getters.userInfo || {};
+        const userId = userInfo.userId || userInfo.id;
+        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:72", "=== 加载档案申请列表 ===");
+        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:73", "用户信息:", userInfo);
+        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:74", "用户ID:", userId);
+        const queryParams = userId ? { applicant: userId } : {};
+        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:78", "查询参数:", queryParams);
         const response = await api_archives.getArchiveApplicationList(queryParams);
-        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:106", "API响应:", response);
-        if (response && response.code === 1) {
+        common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:80", "API响应:", response);
+        if (response && response.code === 200) {
           if (response.rows && Array.isArray(response.rows)) {
-            this.applications = response.rows.map((item) => ({
-              ...item,
-              status: this.mapStatus(item.status),
-              statusText: this.getStatusText(item.status)
-            }));
-            common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:116", "处理后的申请列表:", this.applications);
-            common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:117", "总记录数:", response.total);
+            this.applications = response.rows.map((item) => {
+              const originalStatus = item.status;
+              return {
+                ...item,
+                status: this.mapStatus(originalStatus),
+                statusText: this.getStatusText(originalStatus)
+              };
+            });
+            common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:92", "处理后的申请列表:", this.applications);
+            common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:93", "总记录数:", response.total);
           } else {
             this.applications = [];
-            common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:120", "无申请记录");
+            common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:96", "无申请记录");
           }
         } else {
           this.applications = [];
           const errorMsg = (response == null ? void 0 : response.msg) || "获取列表失败";
-          common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:126", "API响应错误:", errorMsg);
+          common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:101", "API响应错误:", errorMsg);
           common_vendor.index.showToast({
             title: errorMsg,
             icon: "none"
           });
         }
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:133", "加载申请列表失败:", error);
+        common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:108", "加载申请列表失败:", error);
         this.applications = [];
         common_vendor.index.showToast({
           title: "加载失败",
@@ -130,28 +105,19 @@ const archiveQueryPageJs = {
         this.isLoading = false;
       }
     },
-    /**
-     * 显示申请表单
-     */
     showApplicationForm() {
       this.formMode = "add";
       this.currentEditId = null;
       this.resetFormData();
-      const userInfo2 = store_index.store.getters.userInfo || {};
-      this.formData.phone = userInfo2.phonenumber || userInfo2.phone || "";
-      this.formData.email = userInfo2.email || "";
+      const userInfo = store_index.store.getters.userInfo || {};
+      this.formData.phone = userInfo.phonenumber || userInfo.phone || "";
+      this.formData.email = userInfo.email || "";
       this.showFormPopup = true;
     },
-    /**
-     * 关闭表单弹窗
-     */
     closeFormPopup() {
       this.showFormPopup = false;
       this.resetFormData();
     },
-    /**
-     * 重置表单数据
-     */
     resetFormData() {
       this.formData = {
         title: "",
@@ -166,9 +132,6 @@ const archiveQueryPageJs = {
         remark: ""
       };
     },
-    /**
-     * 打开接收方式选择器
-     */
     showSendTypePicker() {
       this.pickerConfig = {
         show: true,
@@ -176,15 +139,9 @@ const archiveQueryPageJs = {
         currentField: "sendType"
       };
     },
-    /**
-     * 关闭选择器
-     */
     closePicker() {
       this.pickerConfig.show = false;
     },
-    /**
-     * 选择器确认选择
-     */
     onPickerConfirm(e) {
       try {
         const selectedText = e.text;
@@ -195,13 +152,10 @@ const archiveQueryPageJs = {
           this.formData.sendType = selectedValue;
         }, 150);
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:219", "选择器确认错误:", error);
+        common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:171", "选择器确认错误:", error);
         this.closePicker();
       }
     },
-    /**
-     * 下载查询结果
-     */
     downloadResult(recordId) {
       const record = this.applications.find((item) => item.id === recordId);
       if (!record || !record.resultUrl) {
@@ -234,7 +188,7 @@ const archiveQueryPageJs = {
           }
         },
         fail: (error) => {
-          common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:262", "下载失败:", error);
+          common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:208", "下载失败:", error);
           common_vendor.index.showToast({
             title: "下载失败",
             icon: "none"
@@ -242,9 +196,6 @@ const archiveQueryPageJs = {
         }
       });
     },
-    /**
-     * 提交表单
-     */
     async submitForm() {
       if (!this.validateForm()) {
         return;
@@ -253,53 +204,37 @@ const archiveQueryPageJs = {
         this.isSubmitting = true;
         const submitData = {
           title: this.formData.title,
-          // applicant: userId,
-          // applicantUserName: userName,
-          // applicantNickName: userInfo.nickName || '',
-          // deptId: userInfo.deptId || 1, // 默认为1
           applicationFile: this.formData.applicationFile,
           applicationReason: this.formData.applicationReason,
           applicationAnnexes: this.formData.applicationAnnexes || "",
-          // 申请附件
           sendType: this.formData.sendType,
-          email: this.formData.email || userInfo.email || "",
+          email: this.formData.email || "",
           address: this.formData.address || "",
           phone: this.formData.phone,
-          // status: '0', // 0-待审核
-          reviewer: null,
-          // 审核人，新增时为空
-          reviewerName: "",
-          // 审核人姓名
-          reviewComments: "",
-          // 审核意见
-          // createBy: userName, // 创建者
-          // updateBy: userName, // 更新者
-          remark: this.formData.remark || "",
-          params: {
-            // 扩展参数，可用于存储额外信息
-          }
+          remark: this.formData.remark || ""
         };
         if (this.formMode === "edit" && this.currentEditId) {
           submitData.id = this.currentEditId;
-          common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:338", "调用编辑API:", submitData);
+          common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:237", "调用编辑API:", submitData);
           const response = await api_archives.updateArchiveApplication(submitData);
-          common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:340", "编辑API响应:", response);
+          common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:239", "编辑API响应:", response);
           common_vendor.index.showToast({
             title: "修改成功",
             icon: "success"
           });
         } else {
-          common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:346", "调用新增API:", submitData);
+          common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:245", "调用新增API:", submitData);
           const response = await api_archives.addArchiveApplication(submitData);
-          common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:348", "新增API响应:", response);
+          common_vendor.index.__f__("log", "at pages/archiveQueryPage/archiveQueryPage.js:247", "新增API响应:", response);
           common_vendor.index.showToast({
             title: "提交成功",
             icon: "success"
           });
         }
+        this.closeFormPopup();
         this.loadApplications();
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:356", "提交错误:", error);
+        common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:256", "提交错误:", error);
         common_vendor.index.showToast({
           title: this.formMode === "edit" ? "修改失败" : "提交失败",
           icon: "none"
@@ -308,9 +243,6 @@ const archiveQueryPageJs = {
         this.isSubmitting = false;
       }
     },
-    /**
-     * 表单验证
-     */
     validateForm() {
       if (!this.formData.title) {
         common_vendor.index.showToast({
@@ -340,7 +272,7 @@ const archiveQueryPageJs = {
         });
         return false;
       }
-      if ((this.formData.sendType === "email" || this.formData.sendType === "both") && !this.formData.email) {
+      if ((this.formData.sendType === "0" || this.formData.sendType === "2") && !this.formData.email) {
         common_vendor.index.showToast({
           title: "请输入电子邮箱",
           icon: "none"
@@ -354,7 +286,7 @@ const archiveQueryPageJs = {
         });
         return false;
       }
-      if ((this.formData.sendType === "paper" || this.formData.sendType === "both") && !this.formData.address) {
+      if ((this.formData.sendType === "1" || this.formData.sendType === "2") && !this.formData.address) {
         common_vendor.index.showToast({
           title: "请输入邮寄地址",
           icon: "none"
@@ -378,9 +310,6 @@ const archiveQueryPageJs = {
       }
       return true;
     },
-    /**
-     * 编辑档案申请
-     */
     editApplication(app) {
       this.formMode = "edit";
       this.currentEditId = app.id;
@@ -399,9 +328,6 @@ const archiveQueryPageJs = {
       };
       this.showFormPopup = true;
     },
-    /**
-     * 撤回档案申请
-     */
     async withdrawApplication(appId) {
       try {
         const confirmResult = await new Promise((resolve) => {
@@ -421,16 +347,13 @@ const archiveQueryPageJs = {
         });
         this.loadApplications();
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:501", "撤回失败:", error);
+        common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:382", "撤回失败:", error);
         common_vendor.index.showToast({
           title: "撤回失败",
           icon: "none"
         });
       }
     },
-    /**
-     * 删除档案申请
-     */
     async deleteApplication(appId) {
       try {
         const confirmResult = await new Promise((resolve) => {
@@ -450,7 +373,7 @@ const archiveQueryPageJs = {
         });
         this.loadApplications();
       } catch (error) {
-        common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:534", "删除申请错误:", error);
+        common_vendor.index.__f__("error", "at pages/archiveQueryPage/archiveQueryPage.js:412", "删除申请错误:", error);
         common_vendor.index.hideLoading();
         common_vendor.index.showToast({
           title: "删除失败，请重试",
@@ -458,25 +381,27 @@ const archiveQueryPageJs = {
         });
       }
     },
-    /**
-     * 映射状态值
-     */
     mapStatus(statusValue) {
       const statusMap = {
         "0": "pending",
         "1": "completed",
-        "2": "rejected"
+        "2": "rejected",
+        "pending": "pending",
+        "completed": "completed",
+        "rejected": "rejected",
+        "sent": "sent"
       };
       return statusMap[String(statusValue)] || "pending";
     },
-    /**
-     * 获取状态文本
-     */
     getStatusText(statusValue) {
       const textMap = {
         "0": "待审核",
         "1": "已通过",
-        "2": "已拒绝"
+        "2": "已拒绝",
+        "pending": "待审核",
+        "completed": "已通过",
+        "rejected": "已拒绝",
+        "sent": "已发放"
       };
       return textMap[String(statusValue)] || "待审核";
     }
@@ -540,33 +465,35 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       fontWeight: "bold",
       splitLine: true,
       isFixed: true,
-      isOccupy: true
+      isOccupy: false
     }),
-    e: common_vendor.p({
+    e: common_assets._imports_0$2,
+    f: common_assets._imports_1,
+    g: common_vendor.p({
       name: "add",
       color: "#FFFFFF",
       size: 32
     }),
-    f: common_vendor.o(_ctx.showApplicationForm),
-    g: common_vendor.p({
+    h: common_vendor.o(_ctx.showApplicationForm),
+    i: common_vendor.p({
       type: "primary",
       background: _ctx.primaryColor
     }),
-    h: common_vendor.t(_ctx.applications.length),
-    i: _ctx.isLoading
+    j: common_vendor.t(_ctx.applications.length),
+    k: _ctx.isLoading
   }, _ctx.isLoading ? {
-    j: common_vendor.p({
+    l: common_vendor.p({
       text: "加载中...",
       iconColor: "#004299"
     })
   } : _ctx.applications.length === 0 ? {
-    l: common_vendor.p({
+    n: common_vendor.p({
       name: "file-search-line",
       size: 80,
       color: "#CCCCCC"
     })
   } : {
-    m: common_vendor.f(_ctx.applications, (app, index, i0) => {
+    o: common_vendor.f(_ctx.applications, (app, index, i0) => {
       return common_vendor.e({
         a: common_vendor.t(app.title),
         b: common_vendor.t(app.statusText),
@@ -578,167 +505,148 @@ function _sfc_render(_ctx, _cache, $props, $setup, $data, $options) {
       }, app.address ? {
         h: common_vendor.t(app.address)
       } : {}, {
-        i: app.reviewComments
+        i: app.reviewerName
+      }, app.reviewerName ? {
+        j: common_vendor.t(app.reviewerName)
+      } : {}, {
+        k: app.reviewComments
       }, app.reviewComments ? {
-        j: common_vendor.t(app.reviewComments)
+        l: app.status === "rejected" ? 1 : "",
+        m: common_vendor.t(app.reviewComments),
+        n: app.status === "rejected" ? 1 : ""
       } : {}, {
-        k: app.status === "pending"
+        o: app.status === "pending"
       }, app.status === "pending" ? {
-        l: common_vendor.o(($event) => _ctx.editApplication(app), app.id),
-        m: "c9b8c156-6-" + i0,
-        n: common_vendor.p({
-          size: "small",
-          background: "#FF9800"
-        }),
-        o: common_vendor.o(($event) => _ctx.withdrawApplication(app.id), app.id),
-        p: "c9b8c156-7-" + i0,
-        q: common_vendor.p({
-          size: "small",
-          background: "#2A6DCF"
-        }),
-        r: common_vendor.o(($event) => _ctx.deleteApplication(app.id), app.id),
-        s: "c9b8c156-8-" + i0,
-        t: common_vendor.p({
-          size: "small",
-          background: "#FF5151"
-        })
+        p: common_vendor.o(($event) => _ctx.editApplication(app), app.id),
+        q: common_vendor.o(($event) => _ctx.withdrawApplication(app.id), app.id),
+        r: common_vendor.o(($event) => _ctx.deleteApplication(app.id), app.id)
       } : {}, {
-        v: app.status === "completed"
+        s: app.status === "completed"
       }, app.status === "completed" ? {
-        w: common_vendor.o(($event) => _ctx.downloadResult(app.id), app.id),
-        x: "c9b8c156-9-" + i0,
-        y: common_vendor.p({
-          size: "small",
-          background: _ctx.primaryColor
-        })
+        t: common_vendor.o(($event) => _ctx.downloadResult(app.id), app.id)
       } : {}, {
-        z: app.status === "rejected"
+        v: app.status === "rejected"
       }, app.status === "rejected" ? {
-        A: common_vendor.o(($event) => _ctx.deleteApplication(app.id), app.id),
-        B: "c9b8c156-10-" + i0,
-        C: common_vendor.p({
-          size: "small",
-          background: "#FF5151"
-        })
+        w: common_vendor.o(($event) => _ctx.deleteApplication(app.id), app.id)
       } : {}, {
-        D: app.id
+        x: app.id
       });
     })
   }, {
-    k: _ctx.applications.length === 0,
-    n: $setup.navHeight + "px",
-    o: common_vendor.t(_ctx.formMode === "edit" ? "编辑" : "新增"),
-    p: common_vendor.o(($event) => _ctx.formData.title = $event),
-    q: common_vendor.p({
+    m: _ctx.applications.length === 0,
+    p: $setup.navHeight + "px",
+    q: common_vendor.t(_ctx.formMode === "edit" ? "编辑" : "新增"),
+    r: common_vendor.o(($event) => _ctx.formData.title = $event),
+    s: common_vendor.p({
       placeholder: "请输入申请标题",
       modelValue: _ctx.formData.title
     }),
-    r: common_vendor.p({
+    t: common_vendor.p({
       label: "申请标题",
       required: true,
       asterisk: true
     }),
-    s: common_vendor.o(($event) => _ctx.formData.applicationFile = $event),
-    t: common_vendor.p({
+    v: common_vendor.o(($event) => _ctx.formData.applicationFile = $event),
+    w: common_vendor.p({
       placeholder: "请输入申请材料名称（如：成绩单）",
       modelValue: _ctx.formData.applicationFile
     }),
-    v: common_vendor.p({
+    x: common_vendor.p({
       label: "申请材料",
       required: true,
       asterisk: true
     }),
-    w: common_vendor.o(($event) => _ctx.formData.applicationReason = $event),
-    x: common_vendor.p({
+    y: common_vendor.o(($event) => _ctx.formData.applicationReason = $event),
+    z: common_vendor.p({
       placeholder: "请输入申请原因",
       maxlength: 200,
       modelValue: _ctx.formData.applicationReason
     }),
-    y: common_vendor.p({
+    A: common_vendor.p({
       label: "申请原因",
       required: true,
       asterisk: true
     }),
-    z: common_vendor.o(_ctx.showSendTypePicker),
-    A: common_vendor.o(($event) => _ctx.formData.sendTypeText = $event),
-    B: common_vendor.p({
+    B: common_vendor.o(_ctx.showSendTypePicker),
+    C: common_vendor.o(($event) => _ctx.formData.sendTypeText = $event),
+    D: common_vendor.p({
       placeholder: "请选择接收方式",
       readonly: true,
       rightIcon: "right",
       modelValue: _ctx.formData.sendTypeText
     }),
-    C: common_vendor.p({
+    E: common_vendor.p({
       label: "接收方式",
       required: true,
       asterisk: true
     }),
-    D: _ctx.formData.sendType === "email" || _ctx.formData.sendType === "both"
-  }, _ctx.formData.sendType === "email" || _ctx.formData.sendType === "both" ? {
-    E: common_vendor.o(($event) => _ctx.formData.email = $event),
-    F: common_vendor.p({
+    F: _ctx.formData.sendType === "0" || _ctx.formData.sendType === "2"
+  }, _ctx.formData.sendType === "0" || _ctx.formData.sendType === "2" ? {
+    G: common_vendor.o(($event) => _ctx.formData.email = $event),
+    H: common_vendor.p({
       placeholder: "请输入电子邮箱",
       type: "email",
       modelValue: _ctx.formData.email
     }),
-    G: common_vendor.p({
+    I: common_vendor.p({
       label: "电子邮箱",
       required: true,
       asterisk: true
     })
   } : {}, {
-    H: _ctx.formData.sendType === "paper" || _ctx.formData.sendType === "both"
-  }, _ctx.formData.sendType === "paper" || _ctx.formData.sendType === "both" ? {
-    I: common_vendor.o(($event) => _ctx.formData.address = $event),
-    J: common_vendor.p({
+    J: _ctx.formData.sendType === "1" || _ctx.formData.sendType === "2"
+  }, _ctx.formData.sendType === "1" || _ctx.formData.sendType === "2" ? {
+    K: common_vendor.o(($event) => _ctx.formData.address = $event),
+    L: common_vendor.p({
       placeholder: "请输入邮寄地址",
       maxlength: 100,
       modelValue: _ctx.formData.address
     }),
-    K: common_vendor.p({
+    M: common_vendor.p({
       label: "邮寄地址"
     })
   } : {}, {
-    L: common_vendor.o(($event) => _ctx.formData.phone = $event),
-    M: common_vendor.p({
+    N: common_vendor.o(($event) => _ctx.formData.phone = $event),
+    O: common_vendor.p({
       placeholder: "请输入联系电话",
       type: "number",
       modelValue: _ctx.formData.phone
     }),
-    N: common_vendor.p({
+    P: common_vendor.p({
       label: "联系电话",
       required: true,
       asterisk: true
     }),
-    O: common_vendor.o(($event) => _ctx.formData.remark = $event),
-    P: common_vendor.p({
+    Q: common_vendor.o(($event) => _ctx.formData.remark = $event),
+    R: common_vendor.p({
       placeholder: "请输入备注信息（选填）",
       maxlength: 200,
       modelValue: _ctx.formData.remark
     }),
-    Q: common_vendor.p({
+    S: common_vendor.p({
       label: "备注"
     }),
-    R: common_vendor.o(_ctx.closeFormPopup),
-    S: common_vendor.p({
+    T: common_vendor.o(_ctx.closeFormPopup),
+    U: common_vendor.p({
       type: "default",
       background: "#E8E8E8",
       color: "#333333"
     }),
-    T: common_vendor.t(_ctx.formMode === "edit" ? "保存" : "提交"),
-    U: common_vendor.o(_ctx.submitForm),
-    V: common_vendor.p({
+    V: common_vendor.t(_ctx.formMode === "edit" ? "保存" : "提交"),
+    W: common_vendor.o(_ctx.submitForm),
+    X: common_vendor.p({
       type: "primary",
       background: _ctx.primaryColor,
       loading: _ctx.isSubmitting
     }),
-    W: common_vendor.o(_ctx.closeFormPopup),
-    X: common_vendor.p({
+    Y: common_vendor.o(_ctx.closeFormPopup),
+    Z: common_vendor.p({
       show: _ctx.showFormPopup,
       height: "75%"
     }),
-    Y: common_vendor.o(_ctx.onPickerConfirm),
-    Z: common_vendor.o(_ctx.closePicker),
-    aa: common_vendor.p({
+    aa: common_vendor.o(_ctx.onPickerConfirm),
+    ab: common_vendor.o(_ctx.closePicker),
+    ac: common_vendor.p({
       show: _ctx.pickerConfig.show,
       options: _ctx.pickerConfig.options,
       zIndex: 1100

@@ -11,108 +11,84 @@ import store from '@/store';
 export default {
 	data() {
 		return {
-			// 导航栏配置
 			navBackground: '#004299',
 			navTitleColor: '#FFFFFF',
 			primaryColor: '#004299',
-			
-			// 申请列表数据
 			applications: [],
-			
-			// 表单数据
 			formData: {
-				title: '', // 申请标题
-				applicationFile: '', // 申请材料
-				applicationReason: '', // 申请原因
-				applicationAnnexes: '', // 申请附件
-				sendType: '', // 接收方式值
-				sendTypeText: '', // 接收方式显示文本
-				email: '', // 电子邮箱
-				address: '', // 邮寄地址
-				phone: '', // 联系电话
-				remark: '' // 备注
+				title: '',
+				applicationFile: '',
+				applicationReason: '',
+				applicationAnnexes: '',
+				sendType: '',
+				sendTypeText: '',
+				email: '',
+				address: '',
+				phone: '',
+				remark: ''
 			},
-			
-			// 接收方式选项（字符串数组）
 			sendTypeOptions: ['电子档', '纸质档(邮寄)', '两者都需要'],
-			
-			// 接收方式映射
 			sendTypeMap: {
-				'电子档': 'email',
-				'纸质档(邮寄)': 'paper',
-				'两者都需要': 'both'
+				'电子档': '0',
+				'纸质档(邮寄)': '1',
+				'两者都需要': '2'
 			},
-			
-			// 选择器配置
+			sendTypeReverseMap: {
+				'0': 'email',
+				'1': 'paper',
+				'2': 'both'
+			},
 			pickerConfig: {
 				show: false,
 				options: [],
 				currentField: ''
 			},
-			
-			// 状态控制
-			isLoading: false, // 列表加载状态
-			isSubmitting: false, // 提交加载状态
-			showFormPopup: false, // 是否显示表单弹窗
-			formMode: 'add', // 表单模式：add-新增, edit-编辑
-			currentEditId: null // 当前编辑的申请ID
+			isLoading: false,
+			isSubmitting: false,
+			showFormPopup: false,
+			formMode: 'add',
+			currentEditId: null
 		}
 	},
 	onLoad() {
 		this.loadApplications();
 	},
 	onShow() {
-		// 页面重新显示时刷新列表
 		this.loadApplications();
 	},
 	methods: {
-		/**
-		 * 返回上一页
-		 */
 		goBack() {
 			uni.navigateBack({
 				delta: 1
 			});
 		},
 		
-		/**
-		 * 加载申请列表
-		 */
 		async loadApplications() {
 			try {
 				this.isLoading = true;
-				
-				// 获取当前用户ID（从store中获取）
 				const userInfo = store.getters.userInfo || {};
 				const userId = userInfo.userId || userInfo.id;
 				
 				console.log('=== 加载档案申请列表 ===');
 				console.log('用户信息:', userInfo);
 				console.log('用户ID:', userId);
-				
-				// 调用API获取列表 - 根据API文档优化查询参数
-				const queryParams = {
-					applicant: userId,
-					// 可以添加其他查询条件
-					// status: '', // 申请状态筛选
-					// title: '', // 标题筛选
-					// applicationFile: '', // 申请材料筛选
-				};
+				// 如果有 userId，则按用户过滤；否则获取所有记录
+				const queryParams = userId ? { applicant: userId } : {};
 				
 				console.log('查询参数:', queryParams);
 				const response = await getArchiveApplicationList(queryParams);
-				
-				// 处理返回数据 - 根据API响应结构
 				console.log('API响应:', response);
 				
-				if (response && response.code === 1) {
-					// 成功响应，处理数据
+				if (response && response.code === 200) {
 					if (response.rows && Array.isArray(response.rows)) {
-						this.applications = response.rows.map(item => ({
-							...item,
-							status: this.mapStatus(item.status),
-							statusText: this.getStatusText(item.status)
-						}));
+						this.applications = response.rows.map(item => {
+							const originalStatus = item.status;
+							return {
+								...item,
+								status: this.mapStatus(originalStatus),
+								statusText: this.getStatusText(originalStatus)
+							};
+						});
 						console.log('处理后的申请列表:', this.applications);
 						console.log('总记录数:', response.total);
 					} else {
@@ -120,7 +96,6 @@ export default {
 						console.log('无申请记录');
 					}
 				} else {
-					// 响应失败
 					this.applications = [];
 					const errorMsg = response?.msg || '获取列表失败';
 					console.error('API响应错误:', errorMsg);
@@ -141,31 +116,21 @@ export default {
 			}
 		},
 		
-		/**
-		 * 显示申请表单
-		 */
 		showApplicationForm() {
 			this.formMode = 'add';
 			this.currentEditId = null;
 			this.resetFormData();
-			// 获取用户信息填充电话和邮箱
 			const userInfo = store.getters.userInfo || {};
 			this.formData.phone = userInfo.phonenumber || userInfo.phone || '';
 			this.formData.email = userInfo.email || '';
 			this.showFormPopup = true;
 		},
 		
-		/**
-		 * 关闭表单弹窗
-		 */
 		closeFormPopup() {
 			this.showFormPopup = false;
 			this.resetFormData();
 		},
 		
-		/**
-		 * 重置表单数据
-		 */
 		resetFormData() {
 			this.formData = {
 				title: '',
@@ -181,9 +146,6 @@ export default {
 			};
 		},
 		
-		/**
-		 * 打开接收方式选择器
-		 */
 		showSendTypePicker() {
 			this.pickerConfig = {
 				show: true,
@@ -192,25 +154,15 @@ export default {
 			};
 		},
 		
-		/**
-		 * 关闭选择器
-		 */
 		closePicker() {
 			this.pickerConfig.show = false;
 		},
 		
-		/**
-		 * 选择器确认选择
-		 */
 		onPickerConfirm(e) {
 			try {
-				const selectedText = e.text; // 选中的文本
-				const selectedValue = this.sendTypeMap[selectedText]; // 映射到对应的值
-				
-				// 先关闭选择器，避免布局冲突
+				const selectedText = e.text;
+				const selectedValue = this.sendTypeMap[selectedText];
 				this.closePicker();
-				
-				// 延迟更新数据，确保选择器完全关闭后再更新
 				setTimeout(() => {
 					this.formData.sendTypeText = selectedText;
 					this.formData.sendType = selectedValue;
@@ -221,9 +173,6 @@ export default {
 			}
 		},
 		
-		/**
-		 * 下载查询结果
-		 */
 		downloadResult(recordId) {
 			const record = this.applications.find(item => item.id === recordId);
 			if (!record || !record.resultUrl) {
@@ -233,13 +182,10 @@ export default {
 				});
 				return;
 			}
-			
-			// 如果有下载链接，使用uni.downloadFile下载
 			uni.downloadFile({
 				url: record.resultUrl,
 				success: (res) => {
 					if (res.statusCode === 200) {
-						// 保存文件到本地
 						const filePath = res.tempFilePath;
 						uni.saveFile({
 							tempFilePath: filePath,
@@ -268,71 +214,24 @@ export default {
 			});
 		},
 		
-		/**
-		 * 提交表单
-		 */
 		async submitForm() {
-			// 表单验证
 			if (!this.validateForm()) {
 				return;
 			}
 			
 			try {
 				this.isSubmitting = true;
-				
-				// 获取当前用户信息
-				// const userInfo = store.getters.userInfo || {};
-				// const userId = userInfo.userId || userInfo.id;
-				// const userName = userInfo.userName || userInfo.nickName || '';
-				
-				// // 检查用户信息
-				// if (!userId) {
-				// 	console.error('用户信息缺失，无法提交申请');
-				// 	uni.showModal({
-				// 		title: '提示',
-				// 		content: '用户信息缺失，请重新登录后再试',
-				// 		showCancel: false,
-				// 		success: () => {
-				// 			uni.reLaunch({ url: '/pages/login/login' });
-				// 		}
-				// 	});
-				// 	return;
-				// }
-				
-				// 构建提交数据 - 完全匹配API示例结构
 				const submitData = {
 					title: this.formData.title,
-					// applicant: userId,
-					// applicantUserName: userName,
-					// applicantNickName: userInfo.nickName || '',
-					// deptId: userInfo.deptId || 1, // 默认为1
 					applicationFile: this.formData.applicationFile,
 					applicationReason: this.formData.applicationReason,
-					applicationAnnexes: this.formData.applicationAnnexes || '', // 申请附件
+					applicationAnnexes: this.formData.applicationAnnexes || '',
 					sendType: this.formData.sendType,
-					email: this.formData.email || userInfo.email || '',
+					email: this.formData.email || '',
 					address: this.formData.address || '',
 					phone: this.formData.phone,
-					// status: '0', // 0-待审核
-					reviewer: null, // 审核人，新增时为空
-					reviewerName: '', // 审核人姓名
-					reviewComments: '', // 审核意见
-					// createBy: userName, // 创建者
-					// updateBy: userName, // 更新者
-					remark: this.formData.remark || '',
-					params: {
-						// 扩展参数，可用于存储额外信息
-					}
+					remark: this.formData.remark || ''
 				};
-				
-				// 打印调试信息
-				// console.log('=== 档案申请提交调试信息 ===');
-				// console.log('用户信息:', userInfo);
-				// console.log('表单数据:', this.formData);
-				// console.log('提交数据:', submitData);
-				// console.log('API模式:', this.formMode === 'edit' ? '编辑' : '新增');
-				
-				// 根据是否为编辑模式调用不同API
 				if (this.formMode === 'edit' && this.currentEditId) {
 					submitData.id = this.currentEditId;
 					console.log('调用编辑API:', submitData);
@@ -351,6 +250,7 @@ export default {
 						icon: 'success'
 					});
 				}
+				this.closeFormPopup();
 				this.loadApplications();
 			} catch (error) {
 				console.error('提交错误:', error);
@@ -363,9 +263,6 @@ export default {
 			}
 		},
 		
-		/**
-		 * 表单验证
-		 */
 		validateForm() {
 			if (!this.formData.title) {
 				uni.showToast({
@@ -398,17 +295,13 @@ export default {
 				});
 				return false;
 			}
-			
-			// 验证电子邮箱（电子档或两者都需要时必填）
-			if ((this.formData.sendType === 'email' || this.formData.sendType === 'both') && !this.formData.email) {
+			if ((this.formData.sendType === '0' || this.formData.sendType === '2') && !this.formData.email) {
 				uni.showToast({
 					title: '请输入电子邮箱',
 					icon: 'none'
 				});
 				return false;
 			}
-			
-			// 验证邮箱格式
 			if (this.formData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.formData.email)) {
 				uni.showToast({
 					title: '请输入正确的邮箱格式',
@@ -417,7 +310,7 @@ export default {
 				return false;
 			}
 			
-			if ((this.formData.sendType === 'paper' || this.formData.sendType === 'both') && !this.formData.address) {
+			if ((this.formData.sendType === '1' || this.formData.sendType === '2') && !this.formData.address) {
 				uni.showToast({
 					title: '请输入邮寄地址',
 					icon: 'none'
@@ -445,14 +338,9 @@ export default {
 			return true;
 		},
 		
-		/**
-		 * 编辑档案申请
-		 */
 		editApplication(app) {
 			this.formMode = 'edit';
 			this.currentEditId = app.id;
-			
-			// 填充表单数据
 			const sendTypeText = Object.keys(this.sendTypeMap).find(key => this.sendTypeMap[key] === app.sendType) || '';
 			
 			this.formData = {
@@ -467,14 +355,9 @@ export default {
 				phone: app.phone || '',
 				remark: app.remark || ''
 			};
-			
-			// 显示表单
 			this.showFormPopup = true;
 		},
 		
-		/**
-		 * 撤回档案申请
-		 */
 		async withdrawApplication(appId) {
 			try {
 				const confirmResult = await new Promise((resolve) => {
@@ -487,8 +370,6 @@ export default {
 				});
 				
 				if (!confirmResult) return;
-				
-				// 撤回即删除
 				await deleteArchiveApplication(appId);
 				
 				uni.showToast({
@@ -506,9 +387,6 @@ export default {
 			}
 		},
 		
-		/**
-		 * 删除档案申请
-		 */
 		async deleteApplication(appId) {
 			try {
 				const confirmResult = await new Promise((resolve) => {
@@ -540,26 +418,28 @@ export default {
 			}
 		},
 		
-		/**
-		 * 映射状态值
-		 */
 		mapStatus(statusValue) {
 			const statusMap = {
 				'0': 'pending',
 				'1': 'completed',
-				'2': 'rejected'
+				'2': 'rejected',
+				'pending': 'pending',
+				'completed': 'completed',
+				'rejected': 'rejected',
+				'sent': 'sent'
 			};
 			return statusMap[String(statusValue)] || 'pending';
 		},
 		
-		/**
-		 * 获取状态文本
-		 */
 		getStatusText(statusValue) {
 			const textMap = {
 				'0': '待审核',
 				'1': '已通过',
-				'2': '已拒绝'
+				'2': '已拒绝',
+				'pending': '待审核',
+				'completed': '已通过',
+				'rejected': '已拒绝',
+				'sent': '已发放'
 			};
 			return textMap[String(statusValue)] || '待审核';
 		}
